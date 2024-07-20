@@ -32,7 +32,7 @@ $(document).ready(function() {
                 $('#signin-section').show();
             },
             error: function(error) {
-                alert('Error during Sign Up');
+                $('#signup-error').text(error.responseJSON.message).show();
             }
         });
     });
@@ -54,7 +54,7 @@ $(document).ready(function() {
                 alert('Sign In successful');
             },
             error: function(error) {
-                alert('Error during Sign In');
+                $('#signin-error').text(error.responseJSON.message).show();
             }
         });
     });
