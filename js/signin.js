@@ -1,4 +1,10 @@
 $(document).ready(function() {
+
+    // Check if user exists in local storage
+    if (localStorage.getItem('user')) {
+        window.location.href = 'home.html';
+    }
+
     $('#show-signup').on('click', function(event) {
         event.preventDefault();
         $('#signin-section').hide();
