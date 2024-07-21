@@ -14,3 +14,31 @@ h2 {
 .alert {
     margin-top: 15px;
 }
+
+.btn {
+    background-color: #4F939A;
+    border-color: #4F939A;
+}
+
+.btn:hover {
+    background-color: #6EAAB2;
+    color: white;
+    border-color: #6EAAB2;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #6EAAB2;
+}
+
+.btn:active {
+    background-color: #4F939A !important;
+    color: white !important;
+    border-color: #4F939A !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px #6EAAB2 !important;
+}
+
+#signup-link{
+    color:#4F939A;
+}

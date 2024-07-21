@@ -27,9 +27,9 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify(userData),
             success: function(response) {
-                alert('Sign Up successful');
-                $('#signup-section').hide();
-                $('#signin-section').show();
+                console.log(response);
+                localStorage.setItem('user', JSON.stringify(response));
+                window.location.href = 'home.html';
             },
             error: function(error) {
                 $('#signup-error').text(error.responseJSON.message).show();
@@ -51,7 +51,9 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify(loginData),
             success: function(response) {
-                alert('Sign In successful');
+                console.log(response);
+                localStorage.setItem('user', JSON.stringify(response));
+                window.location.href = 'home.html';
             },
             error: function(error) {
                 $('#signin-error').text(error.responseJSON.message).show();

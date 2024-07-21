@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"></script>
+    <script src="js/mainPage.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/Taskids_logo.png" alt="Logo" width="60" height="60" />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="kids.html">Kids</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ListOfTasks.html">Tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="giftshop.html">GiftShop</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0 d-none d-lg-flex">
+                    <div class="search-input">
+                        <i class="fa fa-search"></i>
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" />
+                    </div>
+                </form>
+                <img src="images/Picture1.png" alt="Profile" class="profile-pic ml-3" />
+                <button class="btn btn-outline-danger ml-2" type="button">
+                    Log Out
+                </button>
+            </div>
+        </nav>
+    </header>
+    <section class="sort-section mt-3 ml-3 d-none d-lg-flex">
+        <span>Sort:</span>
+        <button class="sort-tag active">None</button>
+        <button class="sort-tag">Deadline</button>
+        <button class="sort-tag">Coins</button>
+        <button class="sort-tag">Assigned to</button>
+    </section>
+    <section id="task-cards" class="container mt-5">
+        <div class="row justify-content-center">
+            <!-- Cards will be inserted here by JavaScript -->
+        </div>
+    </section>
+</body>
+
+</html>
