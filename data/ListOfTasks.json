@@ -1,0 +1,21 @@
+{
+    "category": "Tasks",
+    "tasks": [
+        {
+            "id": 1,
+            "name":"Homework"
+        },
+        {
+            "id": 2,
+            "name":"Take the dog out"
+        },
+        {
+            "id": 3,
+            "name":"Wash the dishes"
+        },
+        {
+            "id": 4,
+            "name":"Clean the room"
+        }
+    ]
+}
