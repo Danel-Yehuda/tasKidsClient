@@ -94,6 +94,34 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="publishTaskModal" tabindex="-1" aria-labelledby="publishTaskModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="publishTaskModalLabel">Publish Task</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="publishTaskForm">
+                                <div class="mb-3">
+                                    <label for="assignedTo" class="form-label">Assigned To</label>
+                                    <select class="form-select" id="assignedTo" required>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deadline" class="form-label">Deadline</label>
+                                    <input type="date" class="form-control" id="deadline" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="coins" class="form-label">Coins</label>
+                                    <input type="number" class="form-control" id="coins" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </body>

@@ -1,7 +1,5 @@
-
-
-// Initialize Bootstrap modal
-
+let taskModal;
+let publishTaskModal;
 
 window.onload = () => {
     fetch("http://localhost:8080/api/tasks")
@@ -10,6 +8,7 @@ window.onload = () => {
             console.log(data);
             createListTasks(data.data);
             DeleteTask();
+            addPublishEventListeners();  // Register event listeners after tasks are created
         });
 
     fetch("data/RecommendPublish.json")
@@ -30,15 +29,33 @@ window.onload = () => {
             PublishTask(data);
         });
 
-    let taskModal = new bootstrap.Modal(document.getElementById('taskModal'));
+    taskModal = new bootstrap.Modal(document.getElementById('taskModal'));
+    publishTaskModal = new bootstrap.Modal(document.getElementById('publishTaskModal'));
+
     document.getElementById('AddTask').addEventListener('click', function () {
         taskModal.show();
     });
+
     document.getElementById('taskForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-        AddNewTask(); // Call the function correctly
+        event.preventDefault();
+        AddNewTask();
+    });
+
+    document.querySelectorAll('.btn-close').forEach(function (element) {
+        element.addEventListener('click', function () {
+            taskModal.hide();
+        });
     });
 };
+
+function addPublishEventListeners() {
+    document.querySelectorAll('.publish-task-btn').forEach(publishButton => {
+        publishButton.addEventListener('click', function (event) {
+            const taskName = this.closest('li').textContent.trim();
+            openPublishModal(event, taskName);
+        });
+    });
+}
 
 function createListTasks(data) {
     const main = document.querySelector("main");
@@ -65,13 +82,16 @@ function createListTasks(data) {
         const publishButton = document.createElement("input");
         publishButton.type = "button";
         publishButton.value = "Publish";
-        publishButton.id = "PublishTask";
+        publishButton.className = "publish-task-btn";
         div.appendChild(publishButton);
 
         li.appendChild(div);
         ul.appendChild(li);
     });
+
+    addPublishEventListeners();  // Register event listeners after tasks are created
 }
+
 
 function createPublish(data) {
     const main = document.querySelector("main");
@@ -163,11 +183,6 @@ function AddNewTask() {
 
     taskModal.hide();
 
-    Array.from(document.getElementsByClassName('btn-close')).forEach(function (element) {
-        element.addEventListener('click', function () {
-            taskModal.hide();
-        });
-    });
 }
 
 function DeleteTask() {
@@ -230,38 +245,6 @@ function DeleteTask() {
 }
 
 function PublishTask(data) {
-    const modalHtml = `
-        <div class="modal fade" id="publishTaskModal" tabindex="-1" aria-labelledby="publishTaskModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="publishTaskModalLabel">Publish Task</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="publishTaskForm">
-                            <div class="mb-3">
-                                <label for="assignedTo" class="form-label">Assigned To</label>
-                                <select class="form-select" id="assignedTo" required>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="deadline" class="form-label">Deadline</label>
-                                <input type="date" class="form-control" id="deadline" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="coins" class="form-label">Coins</label>
-                                <input type="number" class="form-control" id="coins" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-
-    const publishTaskModal = new bootstrap.Modal(document.getElementById('publishTaskModal'));
     const kidsData = data;
     const assignedToSelect = document.getElementById('assignedTo');
 
@@ -272,7 +255,7 @@ function PublishTask(data) {
         assignedToSelect.appendChild(option);
     });
 
-    document.querySelectorAll('#PublishTask').forEach(publishButton => {
+    document.querySelectorAll('.publish-task-btn').forEach(publishButton => {
         publishButton.addEventListener('click', function (event) {
             const taskName = this.closest('li').textContent.trim();
             openPublishModal(publishTaskModal, event, taskName);
@@ -280,11 +263,14 @@ function PublishTask(data) {
     });
 }
 
-function openPublishModal(publishTaskModal, event, taskName) {
+function openPublishModal(event, taskName) {
     publishTaskModal.show();
 
     const form = document.getElementById('publishTaskForm');
-    form.addEventListener('submit', function submitHandler(event) {
+    form.removeEventListener('submit', submitHandler); // Remove previous event listener if any
+    form.addEventListener('submit', submitHandler);
+
+    function submitHandler(event) {
         event.preventDefault();
         const assignedTo = document.getElementById('assignedTo').value;
         const deadline = document.getElementById('deadline').value.split('-').reverse().join('/');
@@ -303,7 +289,7 @@ function openPublishModal(publishTaskModal, event, taskName) {
             newTask: newTask
         });
         publishTaskModal.hide();
-    });
+    }
 
     document.querySelectorAll('.btn-close').forEach(icon => {
         icon.addEventListener('click', function () {
@@ -311,3 +297,5 @@ function openPublishModal(publishTaskModal, event, taskName) {
         });
     });
 }
+
+
