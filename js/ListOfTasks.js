@@ -1,5 +1,7 @@
 let taskModal;
 let publishTaskModal;
+let deleteModal;
+let currentTaskName = ''; // Add this variable to store the current task name
 
 window.onload = () => {
     fetch("http://localhost:8080/api/tasks")
@@ -31,6 +33,7 @@ window.onload = () => {
 
     taskModal = new bootstrap.Modal(document.getElementById('taskModal'));
     publishTaskModal = new bootstrap.Modal(document.getElementById('publishTaskModal'));
+    deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
     document.getElementById('AddTask').addEventListener('click', function () {
         taskModal.show();
@@ -44,7 +47,14 @@ window.onload = () => {
     document.querySelectorAll('.btn-close').forEach(function (element) {
         element.addEventListener('click', function () {
             taskModal.hide();
+            publishTaskModal.hide(); // Ensure publishTaskModal is also handled
+            deleteModal.hide();
         });
+    });
+
+    // Attach submitHandler only once
+    document.getElementById('publishTaskForm').addEventListener('submit', function(event) {
+        submitHandler(event, currentTaskName);
     });
 };
 
@@ -68,6 +78,7 @@ function createListTasks(data) {
         const li = document.createElement("li");
         li.className = "list-group-item d-flex justify-content-between align-items-center";
         li.textContent = task.task_name;
+        li.dataset.taskId = task.task_id;
 
         const div = document.createElement("div");
 
@@ -91,7 +102,6 @@ function createListTasks(data) {
 
     addPublishEventListeners();  // Register event listeners after tasks are created
 }
-
 
 function createPublish(data) {
     const main = document.querySelector("main");
@@ -182,35 +192,12 @@ function AddNewTask() {
     .catch(error => console.error('Error adding task:', error));
 
     taskModal.hide();
-
 }
 
 function DeleteTask() {
     const trashIcons = document.getElementsByClassName("bi-trash");
     let taskToDelete = null;
-
-    const modalHtml = `
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this task?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="cancelDelete" data-bs-dismiss="modal">No</button>
-                        <button type="button" class="btn btn-danger" id="confirmDelete">Yes</button>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-
+    
     Array.from(trashIcons).forEach(icon => {
         icon.addEventListener('click', function () {
             taskToDelete = this.closest('li');
@@ -220,14 +207,21 @@ function DeleteTask() {
 
     document.getElementById('confirmDelete').addEventListener('click', function () {
         if (taskToDelete) {
-            const taskName = taskToDelete.firstChild.textContent.trim();
-
-            console.log(`DELETE https://taskids/api/tasks/`);
-            console.log("Request body:", {
-                taskToDelete: taskToDelete,
-                name: `${taskName}`
-            });
-
+            const taskId = taskToDelete.dataset.taskId;
+    
+            fetch(`http://localhost:8080/api/tasks/${taskId}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Task deleted successfully');
+                    taskToDelete.remove();
+                } else {
+                    console.error('Error deleting task');
+                }
+            })
+            .catch(error => console.error('Error deleting task:', error));
+    
             deleteModal.hide();
         }
     });
@@ -241,7 +235,6 @@ function DeleteTask() {
             deleteModal.hide();
         });
     });
-
 }
 
 function PublishTask(data) {
@@ -258,44 +251,47 @@ function PublishTask(data) {
     document.querySelectorAll('.publish-task-btn').forEach(publishButton => {
         publishButton.addEventListener('click', function (event) {
             const taskName = this.closest('li').textContent.trim();
-            openPublishModal(publishTaskModal, event, taskName);
+            openPublishModal(event, taskName);
         });
     });
+}
+
+function submitHandler(event, taskName) {
+    event.preventDefault();
+    const assignedTo = document.getElementById('assignedTo').value;
+    const deadlineInput = document.getElementById('deadline').value;
+    const deadline = document.getElementById('deadline').value;
+    const coins = document.getElementById('coins').value;
+
+    const newTask = {
+        publish_task_name: taskName,
+        publish_task_status: '1',
+        publish_task_coins: coins,
+        publish_task_deadline: deadline,
+        publish_task_assigned_to: assignedTo
+    };
+
+    // Perform the POST request to create a publish task
+    fetch('http://localhost:8080/api/publish-tasks/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newTask)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Publish task created:', data);
+        // Optionally, refresh the list of tasks or update the UI
+    })
+    .catch(error => {
+        console.error('Error creating publish task:', error);
+    });
+
+    publishTaskModal.hide();
 }
 
 function openPublishModal(event, taskName) {
+    currentTaskName = taskName; // Update the current task name
     publishTaskModal.show();
-
-    const form = document.getElementById('publishTaskForm');
-    form.removeEventListener('submit', submitHandler); // Remove previous event listener if any
-    form.addEventListener('submit', submitHandler);
-
-    function submitHandler(event) {
-        event.preventDefault();
-        const assignedTo = document.getElementById('assignedTo').value;
-        const deadline = document.getElementById('deadline').value.split('-').reverse().join('/');
-        const coins = document.getElementById('coins').value;
-
-        const newTask = {
-            name: taskName,
-            assignedTo: assignedTo,
-            deadline: deadline,
-            coins: coins,
-            status: '1'
-        };
-
-        console.log(`POST https://taskids/api/publish-tasks/`);
-        console.log("Request body:", {
-            newTask: newTask
-        });
-        publishTaskModal.hide();
-    }
-
-    document.querySelectorAll('.btn-close').forEach(icon => {
-        icon.addEventListener('click', function () {
-            publishTaskModal.hide();
-        });
-    });
 }
-
-
