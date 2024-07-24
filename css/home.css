@@ -12,6 +12,15 @@ body{
     color: #4F939A !important;
 }
 
+#logo{
+    background-image: url("../images/Taskids_logo.png");
+    display: block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+}
 
 nav{
     border-bottom: #EBEBEB 1px solid;
