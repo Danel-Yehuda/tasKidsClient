@@ -7,6 +7,7 @@
     <title>Task Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/taskPage.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
@@ -56,7 +57,7 @@
             <div class="col-md-8">
                 <div class="d-flex align-items-center">
                     <h1 id="task-title">Task Name</h1>
-                    <i class="fas fa-pen-to-square ml-3 icon-large" id="edit-icon"></i>
+                    <i class="fas fa-pen-to-square ml-3 icon-large"></i>
                     <i class="fas fa-trash ml-2 icon-large"></i>
                 </div>
                 <div class="task-details mt-4">
@@ -78,45 +79,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Edit Task Modal -->
-    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editTaskForm">
-                        <div class="mb-3">
-                            <label for="edit-task-name" class="form-label">Task Name</label>
-                            <input type="text" class="form-control" id="edit-task-name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit-task-assigned-to" class="form-label">Assigned To</label>
-                            <input type="text" class="form-control" id="edit-task-assigned-to" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit-task-deadline" class="form-label">Deadline</label>
-                            <input type="date" class="form-control" id="edit-task-deadline" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit-task-status" class="form-label">Status</label>
-                            <input type="text" class="form-control" id="edit-task-status" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit-task-coins" class="form-label">Coins</label>
-                            <input type="number" class="form-control" id="edit-task-coins" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
 </body>
 
 </html>
