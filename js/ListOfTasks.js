@@ -173,26 +173,74 @@ function AddTRecommenedTasks(data) {
     rectangleOfRecoomened.appendChild(div);
 }
 
+function appendNewTask(task) {
+    const ul = document.querySelector("main ul.list-group");
+
+    const li = document.createElement("li");
+    li.className = "list-group-item d-flex justify-content-between align-items-center";
+    li.textContent = task.task_name;
+    li.dataset.taskId = task.task_id;
+
+    const div = document.createElement("div");
+
+    const editIcon = document.createElement("i");
+    editIcon.className = "bi bi-pencil";
+    div.appendChild(editIcon);
+
+    const deleteIcon = document.createElement("i");
+    deleteIcon.className = "bi bi-trash";
+    div.appendChild(deleteIcon);
+
+    const publishButton = document.createElement("input");
+    publishButton.type = "button";
+    publishButton.value = "Publish";
+    publishButton.className = "publish-task-btn";
+    div.appendChild(publishButton);
+
+    li.appendChild(div);
+    ul.appendChild(li);
+
+    // Re-register the event listeners for the new task elements
+    deleteIcon.addEventListener('click', function () {
+        const taskToDelete = this.closest('li');
+        deleteTask(taskToDelete);
+    });
+
+    publishButton.addEventListener('click', function (event) {
+        const taskName = this.closest('li').textContent.trim();
+        openPublishModal(event, taskName);
+    });
+}
+
 function AddNewTask() {
     const taskName = document.getElementById('taskName').value;
+
+    // Retrieve the user object from session storage
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const userId = user ? user.data.user_id : null; // Adjust the key according to your user object structure
+
+    if (!userId) {
+        console.error('User is not logged in or user_id is missing');
+        return;
+    }
 
     fetch("http://localhost:8080/api/tasks", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ taskName: taskName })
+        body: JSON.stringify({ taskName: taskName, userId: userId })
     })
     .then(response => response.json())
     .then(data => {
         console.log('Task added:', data);
-        // Optionally, refresh the task list or update the UI
-        createListTasks();
+        appendNewTask(data.data);
     })
     .catch(error => console.error('Error adding task:', error));
 
     taskModal.hide();
 }
+
 
 function DeleteTask() {
     const trashIcons = document.getElementsByClassName("bi-trash");
@@ -262,13 +310,21 @@ function submitHandler(event, taskName) {
     const deadlineInput = document.getElementById('deadline').value;
     const deadline = document.getElementById('deadline').value;
     const coins = document.getElementById('coins').value;
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const userId = user ? user.data.user_id : null; // Adjust the key according to your user object structure
+
+    if (!userId) {
+        console.error('User is not logged in or user_id is missing');
+        return;
+    }
 
     const newTask = {
         publish_task_name: taskName,
         publish_task_status: '1',
         publish_task_coins: coins,
         publish_task_deadline: deadline,
-        publish_task_assigned_to: assignedTo
+        publish_task_assigned_to: assignedTo,
+        userId: userId
     };
 
     // Perform the POST request to create a publish task
