@@ -173,6 +173,45 @@ function AddTRecommenedTasks(data) {
     rectangleOfRecoomened.appendChild(div);
 }
 
+function appendNewTask(task) {
+    const ul = document.querySelector("main ul.list-group");
+
+    const li = document.createElement("li");
+    li.className = "list-group-item d-flex justify-content-between align-items-center";
+    li.textContent = task.task_name;
+    li.dataset.taskId = task.task_id;
+
+    const div = document.createElement("div");
+
+    const editIcon = document.createElement("i");
+    editIcon.className = "bi bi-pencil";
+    div.appendChild(editIcon);
+
+    const deleteIcon = document.createElement("i");
+    deleteIcon.className = "bi bi-trash";
+    div.appendChild(deleteIcon);
+
+    const publishButton = document.createElement("input");
+    publishButton.type = "button";
+    publishButton.value = "Publish";
+    publishButton.className = "publish-task-btn";
+    div.appendChild(publishButton);
+
+    li.appendChild(div);
+    ul.appendChild(li);
+
+    // Re-register the event listeners for the new task elements
+    deleteIcon.addEventListener('click', function () {
+        const taskToDelete = this.closest('li');
+        deleteTask(taskToDelete);
+    });
+
+    publishButton.addEventListener('click', function (event) {
+        const taskName = this.closest('li').textContent.trim();
+        openPublishModal(event, taskName);
+    });
+}
+
 function AddNewTask() {
     const taskName = document.getElementById('taskName').value;
 
@@ -195,8 +234,7 @@ function AddNewTask() {
     .then(response => response.json())
     .then(data => {
         console.log('Task added:', data);
-        // Optionally, refresh the task list or update the UI
-        createListTasks();
+        appendNewTask(data.data);
     })
     .catch(error => console.error('Error adding task:', error));
 
