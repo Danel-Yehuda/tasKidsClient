@@ -178,7 +178,7 @@ function AddNewTask() {
 
     // Retrieve the user object from session storage
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const userId = user ? user.user_id : null; // Adjust the key according to your user object structure
+    const userId = user ? user.data.user_id : null; // Adjust the key according to your user object structure
 
     if (!userId) {
         console.error('User is not logged in or user_id is missing');
@@ -190,7 +190,7 @@ function AddNewTask() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ taskName: taskName, user_id: userId })
+        body: JSON.stringify({ taskName: taskName, userId: userId })
     })
     .then(response => response.json())
     .then(data => {
