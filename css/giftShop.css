@@ -1,0 +1,197 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8F9FA;
+}
+
+.navbar-nav .nav-item .nav-link.active {
+    color: #4F939A !important;
+}
+
+#logo {
+    background-image: url("../images/Taskids_logo.png");
+    display: block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+}
+
+nav {
+    border-bottom: #EBEBEB 1px solid;
+}
+
+.navbar-nav {
+    margin-left: 40px;
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.search-input {
+    position: relative;
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.search-input input {
+    padding-left: 30px;
+    border-radius: 32px;
+    width: 100%;
+}
+
+.search-input input::placeholder {
+    color: #4F939A;
+}
+
+.search-input .fa-search {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #FFC107;
+}
+
+.nav-item {
+    font-size: x-large;
+    margin-left: 30px;
+}
+
+.btn {
+    color: #4F939A;
+    border-color: #4F939A;
+}
+
+.btn:hover {
+    background-color: #6EAAB2;
+    color: white;
+    border-color: #6EAAB2;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #6EAAB2;
+}
+
+.btn:active {
+    background-color: #4F939A !important;
+    color: white !important;
+    border-color: #4F939A !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px #6EAAB2 !important;
+}
+
+h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    color: #FF6F61;
+    text-align: center;
+    margin: 40px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+h1::before {
+    content: "🎁 ";
+    font-size: 50px;
+}
+
+h1::after {
+    content: " 🎉";
+    font-size: 50px;
+}
+.card {
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    width: 250px;
+    height: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    background: linear-gradient(135deg, #ffcfd2, #98f5e1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card .icon {
+    font-size: 40px;
+    color: #1aaec5;
+}
+
+.card .title {
+    margin-top: 20px;
+    font-size: 2.0em;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+}
+
+.card .details {
+    font-size: 1.1em;
+    color: #333;
+    margin-top: 10px;
+}
+
+.card .details .coins {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    justify-content: center;
+    font-size: 1.5em;
+    color: #FFC107;
+}
+
+.card .details .coins i {
+    margin-left: 5px;
+}
+
+.card .subDetails {
+    margin-top: 20px;
+}
+
+.card .subDetails button {
+    background-color: #f08080;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+
+    transition: background-color 0.3s ease;
+}
+
+.card .subDetails button:hover {
+    background-color: #3fe2ff;
+}
+
+.card .subDetails button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #FF4F3F;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        height: auto;
+        margin: 10px 0;
+    }
+}
