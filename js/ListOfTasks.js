@@ -2,6 +2,8 @@ let taskModal;
 let publishTaskModal;
 let deleteModal;
 let currentTaskName = ''; // Add this variable to store the current task name
+let editTaskModal;
+let taskId = '';
 
 window.onload = () => {
     fetch("http://localhost:8080/api/tasks")
@@ -56,6 +58,13 @@ window.onload = () => {
     document.getElementById('publishTaskForm').addEventListener('submit', function(event) {
         submitHandler(event, currentTaskName);
     });
+
+    editTaskModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+
+    document.getElementById('editTaskForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        EditTask();
+    });
 };
 
 function addPublishEventListeners() {
@@ -84,6 +93,9 @@ function createListTasks(data) {
 
         const editIcon = document.createElement("i");
         editIcon.className = "bi bi-pencil";
+        editIcon.addEventListener('click', function () {
+            openEditModal(task);
+        });
         div.appendChild(editIcon);
 
         const deleteIcon = document.createElement("i");
@@ -101,6 +113,41 @@ function createListTasks(data) {
     });
 
     addPublishEventListeners();  // Register event listeners after tasks are created
+}
+
+
+function openEditModal(task) {
+    taskId = task.task_id;
+    console.log('Task ID:', taskId);
+    document.getElementById('editTaskName').value = task.task_name;
+    editTaskModal.show();
+}
+
+function EditTask() {
+    const taskName = document.getElementById('editTaskName').value;
+
+    if (!taskId || !taskName) {
+        console.error('Task ID or Task Name is missing');
+        return;
+    }
+
+    fetch(`http://localhost:8080/api/tasks/${taskId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            taskName: taskName
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Task updated:', data);
+        
+    })
+    .catch(error => console.error('Error updating task:', error));
+
+    editTaskModal.hide();
 }
 
 function createPublish(data) {
