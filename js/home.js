@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Log out button functionality
     document.querySelector('.btn-outline-danger').addEventListener('click', function() {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         window.location.href = 'index.html';
     });
 
@@ -60,7 +60,7 @@ function renderPublishTasks(tasks) {
         `;
 
         card.addEventListener('click', function() {
-            localStorage.setItem('selectedTask', JSON.stringify(task));
+            sessionStorage.setItem('selectedTask', JSON.stringify(task));
             window.location.href = 'taskPage.html';
         });
 

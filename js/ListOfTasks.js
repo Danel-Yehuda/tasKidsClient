@@ -310,13 +310,21 @@ function submitHandler(event, taskName) {
     const deadlineInput = document.getElementById('deadline').value;
     const deadline = document.getElementById('deadline').value;
     const coins = document.getElementById('coins').value;
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const userId = user ? user.data.user_id : null; // Adjust the key according to your user object structure
+
+    if (!userId) {
+        console.error('User is not logged in or user_id is missing');
+        return;
+    }
 
     const newTask = {
         publish_task_name: taskName,
         publish_task_status: '1',
         publish_task_coins: coins,
         publish_task_deadline: deadline,
-        publish_task_assigned_to: assignedTo
+        publish_task_assigned_to: assignedTo,
+        userId: userId
     };
 
     // Perform the POST request to create a publish task

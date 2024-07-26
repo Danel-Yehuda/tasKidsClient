@@ -1,7 +1,6 @@
 $(document).ready(function() {
 
-    // Check if user exists in local storage
-    if (localStorage.getItem('user')) {
+    if (sessionStorage.getItem('user')) {
         window.location.href = 'home.html';
     }
 
