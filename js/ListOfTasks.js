@@ -123,6 +123,33 @@ function openEditModal(task) {
     editTaskModal.show();
 }
 
+function updateTaskInDOM(taskId, taskName) {
+    const taskElement = document.querySelector(`li[data-task-id='${taskId}']`);
+    if (taskElement) {
+        taskElement.textContent = taskName;
+        const div = document.createElement("div");
+
+        const editIcon = document.createElement("i");
+        editIcon.className = "bi bi-pencil";
+        editIcon.addEventListener('click', function () {
+            openEditModal({ task_id: taskId, task_name: taskName });
+        });
+        div.appendChild(editIcon);
+
+        const deleteIcon = document.createElement("i");
+        deleteIcon.className = "bi bi-trash";
+        div.appendChild(deleteIcon);
+
+        const publishButton = document.createElement("input");
+        publishButton.type = "button";
+        publishButton.value = "Publish";
+        publishButton.className = "publish-task-btn";
+        div.appendChild(publishButton);
+
+        taskElement.appendChild(div);
+    }
+}
+
 function EditTask() {
     const taskName = document.getElementById('editTaskName').value;
 
@@ -143,7 +170,7 @@ function EditTask() {
     .then(response => response.json())
     .then(data => {
         console.log('Task updated:', data);
-        
+        updateTaskInDOM(taskId, taskName);
     })
     .catch(error => console.error('Error updating task:', error));
 
