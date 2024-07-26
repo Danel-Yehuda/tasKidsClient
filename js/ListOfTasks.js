@@ -338,7 +338,11 @@ function submitHandler(event, taskName) {
     .then(response => response.json())
     .then(data => {
         console.log('Publish task created:', data);
-        // Optionally, refresh the list of tasks or update the UI
+        const successAlert = document.getElementById('success-alert');
+        successAlert.style.display = 'block';
+        setTimeout(() => {
+            successAlert.style.display = 'none';
+        }, 3000);
     })
     .catch(error => {
         console.error('Error creating publish task:', error);
