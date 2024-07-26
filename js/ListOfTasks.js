@@ -176,12 +176,21 @@ function AddTRecommenedTasks(data) {
 function AddNewTask() {
     const taskName = document.getElementById('taskName').value;
 
+    // Retrieve the user object from session storage
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const userId = user ? user.user_id : null; // Adjust the key according to your user object structure
+
+    if (!userId) {
+        console.error('User is not logged in or user_id is missing');
+        return;
+    }
+
     fetch("http://localhost:8080/api/tasks", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ taskName: taskName })
+        body: JSON.stringify({ taskName: taskName, user_id: userId })
     })
     .then(response => response.json())
     .then(data => {
@@ -193,6 +202,7 @@ function AddNewTask() {
 
     taskModal.hide();
 }
+
 
 function DeleteTask() {
     const trashIcons = document.getElementsByClassName("bi-trash");
