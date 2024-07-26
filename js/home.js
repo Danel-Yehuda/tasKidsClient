@@ -24,7 +24,7 @@ async function fetchPublishTasks() {
         }
         const result = await response.json();
         console.log('Publish tasks result:', result);
-        
+
         if (Array.isArray(result.data)) {
             renderPublishTasks(result.data);
         } else {
