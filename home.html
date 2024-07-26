@@ -17,9 +17,7 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="home.html">
-                <img src="images/Taskids_logo.png" alt="Logo" width="60" height="60" />
-            </a>
+            <a href="home.html" id="logo"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -52,18 +50,20 @@
             </div>
         </nav>
     </header>
-    <section class="sort-section mt-3 ml-3 d-none d-lg-flex">
-        <span>Sort:</span>
-        <button class="sort-tag active">None</button>
-        <button class="sort-tag">Deadline</button>
-        <button class="sort-tag">Coins</button>
-        <button class="sort-tag">Assigned to</button>
-    </section>
-    <section id="task-cards" class="container mt-5">
-        <div class="row justify-content-center">
-            <!-- Cards will be inserted here by JavaScript -->
-        </div>
-    </section>
+    <main>
+        <section class="sort-section mt-3 ml-3 d-none d-lg-flex">
+            <span>Sort:</span>
+            <button class="sort-tag active">None</button>
+            <button class="sort-tag">Deadline</button>
+            <button class="sort-tag">Coins</button>
+            <button class="sort-tag">Assigned to</button>
+        </section>
+        <section id="task-cards" class="container mt-5">
+            <div class="row justify-content-center">
+                <!-- Cards will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </main>
 </body>
 
 </html>
