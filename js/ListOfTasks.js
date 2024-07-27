@@ -112,7 +112,7 @@ function createListTasks(data) {
         ul.appendChild(li);
     });
 
-    addPublishEventListeners();  // Register event listeners after tasks are created
+    addPublishEventListeners();
 }
 
 

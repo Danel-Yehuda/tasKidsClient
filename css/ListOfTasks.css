@@ -592,3 +592,28 @@ h2 {
 .btn-secondary {
     background-color: #3FDBC8;
 }
+
+@media (max-width: 1080px) {
+    .search-input {
+        margin-right: 0;
+    }
+
+    .navbar-nav {
+        margin-left: 0;
+    }
+
+    .navbar-nav .nav-item {
+        font-size: large;
+        margin-left: 20px;
+    }
+
+    .sort-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sort-section span,
+    .sort-tag {
+        margin-bottom: 10px;
+    }
+}
