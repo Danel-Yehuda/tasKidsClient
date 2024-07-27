@@ -1,23 +1,27 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Logout button functionality
     document.querySelector('.btn-outline-danger').addEventListener('click', function () {
         sessionStorage.removeItem('user');
         window.location.href = 'index.html';
     });
 
-    fetchGifts();
-});
-
-window.onload = () => {
+    // Initialize the Bootstrap modal
     const addGiftModal = new bootstrap.Modal(document.getElementById('addGiftModal'));
+
+    // Show the modal when the "Add Gift" button is clicked
     document.getElementById('add-gift-button').addEventListener('click', function () {
         addGiftModal.show();
     });
 
+    // Handle form submission
     document.getElementById('add-gift-form').addEventListener('submit', async function (event) {
         event.preventDefault();
         await addGift();
     });
-};
+
+    // Fetch and display gifts
+    fetchGifts();
+});
 
 async function fetchGifts() {
     try {
@@ -64,3 +68,37 @@ async function renderGifts(gifts) {
     giftCardsContainer.appendChild(row);
 }
 
+async function addGift() {
+    const giftName = document.getElementById('gift-name').value;
+    const giftCoins = document.getElementById('gift-coins').value;
+
+    const newGift = {
+        name: giftName,
+        coins: giftCoins
+    };
+
+    try {
+        const response = await fetch('http://localhost:8080/api/gift-shop', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newGift)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log('Gift added:', result);
+
+        await fetchGifts();
+
+        const addGiftModal = bootstrap.Modal.getInstance(document.getElementById('addGiftModal'));
+        addGiftModal.hide();
+        document.getElementById('add-gift-form').reset();
+    } catch (error) {
+        console.error('Error adding gift:', error);
+    }
+}

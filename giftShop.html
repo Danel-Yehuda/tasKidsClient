@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"></script>
-    <script src="js/home.js"></script>
+    <script src="js/giftshop.js"></script>
 </head>
 
 <body>
@@ -56,6 +56,32 @@
             <button class="btn btn-success" id="add-gift-button">Add Gift</button>
         </div>
         <section id="gift-cards" class="container mt-5"></section>
+
+        <div class="modal fade" id="addGiftModal" tabindex="-1" role="dialog" aria-labelledby="addGiftModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addGiftModalLabel">Add New Gift</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="add-gift-form">
+                            <div class="form-group">
+                                <label for="gift-name">Gift Name</label>
+                                <input type="text" class="form-control" id="gift-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gift-coins">Coins</label>
+                                <input type="number" class="form-control" id="gift-coins" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Gift</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 

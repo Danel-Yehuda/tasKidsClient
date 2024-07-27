@@ -111,6 +111,7 @@ h1::after {
     content: " 🎉";
     font-size: 50px;
 }
+
 #add-gift-button {
     font-size: 1.3rem;
     font-weight: normal;
@@ -215,4 +216,8 @@ h1::after {
         height: auto;
         margin: 10px 0;
     }
+}
+
+.btn-primary {
+    color: white;
 }
