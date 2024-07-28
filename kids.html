@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kids Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/kids.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="js/kids.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a href="home.html" id="logo"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="kids.html">Kids</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ListOfTasks.html">Tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="giftShop.html">GiftShop</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0 d-none d-lg-flex">
+                    <div class="search-input">
+                        <i class="fa fa-search"></i>
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" />
+                    </div>
+                </form>
+                <img src="images/Picture1.png" alt="Profile" class="profile-pic ml-3" />
+                <button class="btn btn-outline-danger ml-2" type="button">
+                    Log Out
+                </button>
+            </div>
+        </nav>
+    </header>
+    <main class="container mt-5">
+        <h1>Kids Management</h1>
+        <button class="btn btn-primary mb-3" id="addKidBtn">Add Kid</button>
+        <div class="row" id="kidsList">
+            <!-- Kids cards will be dynamically added here -->
+        </div>
+        <!-- Add Kid Modal -->
+        <div class="modal fade" id="addKidModal" tabindex="-1" aria-labelledby="addKidModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addKidModalLabel">Add Kid</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addKidForm">
+                            <div class="form-group">
+                                <label for="kidName">Kid Name</label>
+                                <input type="text" class="form-control" id="kidName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="kidPassword">Password</label>
+                                <input type="password" class="form-control" id="kidPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Kid</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Edit Kid Modal -->
+        <div class="modal fade" id="editKidModal" tabindex="-1" aria-labelledby="editKidModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editKidModalLabel">Edit Kid</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editKidForm">
+                            <div class="form-group">
+                                <label for="editKidName">Kid Name</label>
+                                <input type="text" class="form-control" id="editKidName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editKidCoins">Coins</label>
+                                <input type="number" class="form-control" id="editKidCoins" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editKidTasksDone">Tasks Done</label>
+                                <input type="number" class="form-control" id="editKidTasksDone" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Kid Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this kid?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cancelDelete" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger" id="confirmDelete">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
