@@ -1,4 +1,5 @@
 let editTaskModal;
+let deleteTaskModal;
 let currentTaskId = ''; // Add this variable to store the current task ID
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -28,15 +29,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('delete-task').addEventListener('click', function() {
             console.log('Delete button clicked');
-            if (confirm('Are you sure you want to delete this task?')) {
-                deleteTask(task.publish_task_id);
-            }
+            currentTaskId = task.publish_task_id; // Store the current task ID for deletion
+            deleteTaskModal.show();
+        });
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            deleteTask(currentTaskId);
         });
     } else {
         console.error('No task data found in sessionStorage');
     }
 
     editTaskModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+    deleteTaskModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
     document.getElementById('editTaskForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -96,21 +101,12 @@ function deleteTask(taskId) {
     .then(response => {
         if (response.ok) {
             console.log('Task deleted successfully');
-            removeTaskFromDOM();
-            window.location.href = 'home.html';
+            window.location.href = 'home.html'; // Navigate to home page after deletion
         } else {
             console.error('Error deleting task');
         }
     })
     .catch(error => console.error('Error deleting task:', error));
-}
-
-function removeTaskFromDOM() {
-    document.getElementById('task-title').textContent = '';
-    document.getElementById('task-assigned-to').textContent = '';
-    document.getElementById('task-deadline').textContent = '';
-    document.getElementById('task-status').textContent = '';
-    document.getElementById('task-coins').textContent = '';
 }
 
 function updateTaskInDOM(task) {
