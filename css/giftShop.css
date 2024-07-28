@@ -221,3 +221,37 @@ h1::after {
 .btn-primary {
     color: white;
 }
+
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.subDetails {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1rem;
+    /* Adjust the margin as needed */
+}
+
+.icon-container {
+    display: flex;
+    gap: 0.5rem;
+    /* Space between icons */
+}
+
+.icon-large {
+    font-size: 2.5rem;
+    /* Adjust the size as needed */
+    cursor: pointer;
+    /* Add cursor pointer to indicate clickable icons */
+}
+
+.btn-secondary,
+.btn-danger {
+    color: white;
+
+}

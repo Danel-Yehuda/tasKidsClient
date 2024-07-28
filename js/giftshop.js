@@ -1,11 +1,16 @@
+let deleteModal;
+let giftToDelete;
+
 document.addEventListener('DOMContentLoaded', function () {
     const addGiftModal = new bootstrap.Modal(document.getElementById('addGiftModal'));
+    deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
     document.getElementById('add-gift-button').addEventListener('click', function () {
         addGiftModal.show();
     });
 
     const addGiftForm = document.getElementById('add-gift-form');
-    addGiftForm.addEventListener('submit', function(event) {
+    addGiftForm.addEventListener('submit', function (event) {
         event.preventDefault();
         const user = JSON.parse(sessionStorage.getItem('user'));
         const userId = user ? user.data.user_id : null;
@@ -13,6 +18,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     fetchGifts();
+
+    document.getElementById('confirmDelete').addEventListener('click', function () {
+        if (giftToDelete) {
+            const giftId = giftToDelete.dataset.giftId;
+            deleteGift(giftId);
+        }
+    });
+
+    document.getElementById('cancelDelete').addEventListener('click', function () {
+        deleteModal.hide();
+    });
+
+    document.querySelectorAll('.btn-close').forEach(function (element) {
+        element.addEventListener('click', function () {
+            addGiftModal.hide();
+            deleteModal.hide();
+        });
+    });
 });
 
 async function fetchGifts() {
@@ -44,19 +67,31 @@ function renderGifts(gifts) {
     gifts.forEach(gift => {
         const card = document.createElement('div');
         card.className = 'card col-md-3';
+        card.dataset.giftId = gift.gift_id; // Add data-id attribute
         card.innerHTML = `
             <i class="icon fas fa-gift"></i>
             <div class="title">${gift.gift_name}</div>
             <div class="details">
                 <div class="coins"><span>${gift.coin_cost}</span> <i id="coinIcon" class="fas fa-coins"></i></div>
                 <div class="subDetails">
-                    <button class="btn btn-primary mt-2">Buy Gift</button>
+                    <div class="icon-container">
+                        <i class="bi bi-pencil icon-large" data-id="${gift.gift_id}"></i>
+                        <i class="bi bi-trash icon-large" data-id="${gift.gift_id}"></i>
+                    </div>
                 </div>
             </div>
         `;
         row.appendChild(card);
     });
+
     giftCardsContainer.appendChild(row);
+
+    document.querySelectorAll('.bi-trash').forEach(icon => {
+        icon.addEventListener('click', function () {
+            giftToDelete = this.closest('.card');
+            deleteModal.show();
+        });
+    });
 }
 
 async function addGift(addGiftModal, userId) {
@@ -77,8 +112,9 @@ async function addGift(addGiftModal, userId) {
         coin_cost: parseInt(giftCoins, 10),
         user_id: userId
     };
+    addGiftModal.hide();
 
-    console.log('Adding new gift with payload:', newGift); // Debugging line
+    console.log('Adding new gift with payload:', newGift);
 
     try {
         const response = await fetch('http://localhost:8080/api/gift-shop', {
@@ -98,9 +134,26 @@ async function addGift(addGiftModal, userId) {
 
         await fetchGifts();
 
-        addGiftModal.hide(); // Hide the modal using the modal instance
         document.getElementById('add-gift-form').reset();
     } catch (error) {
         console.error('Error adding gift:', error);
+    }
+}
+
+async function deleteGift(giftId) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/gift-shop/${giftId}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        deleteModal.hide();
+
+        console.log('Gift deleted successfully');
+        await fetchGifts();
+    } catch (error) {
+        console.error('Error deleting gift:', error);
     }
 }

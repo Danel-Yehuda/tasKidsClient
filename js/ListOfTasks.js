@@ -52,12 +52,11 @@ window.onload = () => {
     document.querySelectorAll('.btn-close').forEach(function (element) {
         element.addEventListener('click', function () {
             taskModal.hide();
-            publishTaskModal.hide(); // Ensure publishTaskModal is also handled
+            publishTaskModal.hide();
             deleteModal.hide();
         });
     });
 
-    // Attach submitHandler only once
     document.getElementById('publishTaskForm').addEventListener('submit', function(event) {
         submitHandler(event, currentTaskName);
     });
