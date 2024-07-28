@@ -5,6 +5,7 @@ let currentTaskId = ''; // Add this variable to store the current task ID
 document.addEventListener('DOMContentLoaded', function() {
     const task = JSON.parse(sessionStorage.getItem('selectedTask'));
     if (task) {
+        currentTaskId = task.publish_task_id;
         document.getElementById('task-title').textContent = task.publish_task_name;
         document.getElementById('task-assigned-to').textContent = task.publish_task_assigned_to;
         document.getElementById('task-deadline').textContent = formatDate(new Date(task.publish_task_deadline));
@@ -56,11 +57,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (user) {
         profilePicElement.src = "images/Picture1.png";
+        document.getElementById('parent-actions').style.display = 'block';
+        document.getElementById('kid-actions').style.display = 'none';
     }
     if (kid) {
         profilePicElement.src = "images/kid1.jpg";
         document.getElementById('kidsNav').style.display = 'none';
         document.getElementById('tasksNav').style.display = 'none';
+        document.getElementById('edit-task').style.display = 'none';
+        document.getElementById('delete-task').style.display = 'none';
+        document.getElementById('parent-actions').style.display = 'none';
+        document.getElementById('kid-actions').style.display = 'block';
+
+        const startTaskButton = document.getElementById('start-task-btn');
+        
+        if(task.publish_task_status === '2'){
+            console.log('Task in progress');
+            startTaskButton.textContent = 'I\'m Done!'
+        }
+        if(task.publish_task_status === '3'){
+            startTaskButton.style.display = 'none';
+            const kidAction = document.getElementById('kid-actions');
+            kidAction.appendChild(document.createElement('p')).textContent = 'Good Job! Waiting for parent to approve';
+        }
+        startTaskButton.addEventListener('click', function() {
+            if (startTaskButton.textContent === 'Start') {
+                updateTaskStatus(2);
+                startTaskButton.textContent = 'I\'m Done!';
+            } else if (startTaskButton.textContent === 'I\'m Done!') {
+                updateTaskStatus(3);
+            }
+        });
     }
 });
 
@@ -122,6 +149,25 @@ function deleteTask(taskId) {
         }
     })
     .catch(error => console.error('Error deleting task:', error));
+}
+
+function updateTaskStatus(status) {
+    console.log(currentTaskId, status);
+    fetch(`http://localhost:8080/api/publish-tasks/status/${currentTaskId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            publish_task_status: status
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Task status updated:', data);
+        updateTaskInDOM(data.data);
+    })
+    .catch(error => console.error('Error updating task status:', error));
 }
 
 function updateTaskInDOM(task) {

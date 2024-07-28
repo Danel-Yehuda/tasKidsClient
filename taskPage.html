@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +12,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script src="js/taskPage.js"></script>
 </head>
-
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -65,9 +63,12 @@
                         <p><strong>Status:</strong> <span id="task-status"></span></p>
                         <p><strong>Coins:</strong> <span id="task-coins"></span></p>
                     </div>
-                    <div class="task-actions mt-4">
+                    <div class="task-actions mt-4" id="parent-actions">
                         <button class="btn btn-success">Approve</button>
                         <button class="btn btn-danger">Disapprove</button>
+                    </div>
+                    <div class="task-actions mt-4" id="kid-actions">
+                        <button class="btn btn-primary" id="start-task-btn">Start</button>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -142,5 +143,4 @@
         </div>
     </main>
 </body>
-
 </html>
