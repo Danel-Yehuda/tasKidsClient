@@ -42,3 +42,13 @@ h2 {
 #signup-link{
     color:#4F939A;
 }
+
+#logo {
+    background-image: url("../images/kid_login.png");
+    display: block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 165px;
+    height: 165px;
+    cursor: pointer;
+}
