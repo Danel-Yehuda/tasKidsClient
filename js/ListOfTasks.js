@@ -27,7 +27,10 @@ window.onload = () => {
             AddTRecommenedTasks(data);
         });
 
-    fetch("data/Kids.json")
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const userId = user ? user.data.user_id : null;
+
+    fetch(`http://localhost:8080/api/kids/byParent/${userId}`)
         .then(response => response.json())
         .then(data => {
             PublishTask(data);
@@ -114,7 +117,6 @@ function createListTasks(data) {
 
     addPublishEventListeners();
 }
-
 
 function openEditModal(task) {
     taskId = task.task_id;
@@ -360,13 +362,13 @@ function DeleteTask() {
 }
 
 function PublishTask(data) {
-    const kidsData = data;
+    const kidsData = data.data;
     const assignedToSelect = document.getElementById('assignedTo');
 
     kidsData.forEach(kid => {
         const option = document.createElement('option');
-        option.value = kid.name;
-        option.textContent = kid.name;
+        option.value = kid.kid_id;
+        option.textContent = kid.kid_name;
         assignedToSelect.appendChild(option);
     });
 
@@ -380,8 +382,10 @@ function PublishTask(data) {
 
 function submitHandler(event, taskName) {
     event.preventDefault();
-    const assignedTo = document.getElementById('assignedTo').value;
-    const deadlineInput = document.getElementById('deadline').value;
+    const assignedToSelect = document.getElementById('assignedTo');
+    const assignedTo = assignedToSelect.options[assignedToSelect.selectedIndex];
+    const kidId = assignedTo.value;
+    const kidName = assignedTo.textContent;
     const deadline = document.getElementById('deadline').value;
     const coins = document.getElementById('coins').value;
     const user = JSON.parse(sessionStorage.getItem('user'));
@@ -397,7 +401,8 @@ function submitHandler(event, taskName) {
         publish_task_status: '1',
         publish_task_coins: coins,
         publish_task_deadline: deadline,
-        publish_task_assigned_to: assignedTo,
+        publish_task_assigned_to: kidName,
+        kid_id: kidId,
         userId: userId
     };
 

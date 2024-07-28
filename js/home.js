@@ -2,9 +2,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Log out button functionality
     document.querySelector('.btn-outline-danger').addEventListener('click', function() {
         sessionStorage.removeItem('user');
+        sessionStorage.removeItem('kid');
         window.location.href = 'index.html';
     });
 
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const kid = JSON.parse(sessionStorage.getItem('kid'));
+    console.log('User:', user);
+    console.log('Kid:', kid);
+    const profilePicElement = document.getElementById('profilePic');
+
+    if (user) {
+        profilePicElement.src = "images/Picture1.png";
+    }
+    if (kid) {
+        profilePicElement.src = "images/kid1.jpg";
+        document.getElementById('kidsNav').style.display = 'none';
+        document.getElementById('tasksNav').style.display = 'none';
+
+    }
     // Fetch and display publish tasks
     fetchPublishTasks();
 });
