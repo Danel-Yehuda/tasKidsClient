@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const addGiftForm = document.getElementById('add-gift-form');
     addGiftForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        addGift(addGiftModal);
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        const userId = user ? user.data.user_id : null;
+        addGift(addGiftModal, userId);
     });
 
     fetchGifts();
@@ -57,10 +59,14 @@ function renderGifts(gifts) {
     giftCardsContainer.appendChild(row);
 }
 
-async function addGift(addGiftModal) {
+async function addGift(addGiftModal, userId) {
     const giftName = document.getElementById('gift-name').value;
     const giftCoins = document.getElementById('gift-coins').value;
 
+    if (!userId) {
+        console.error('User is not logged in or user_id is missing');
+        return;
+    }
     if (!giftName || !giftCoins) {
         console.error('Gift name or coins are missing');
         return;
@@ -68,8 +74,11 @@ async function addGift(addGiftModal) {
 
     const newGift = {
         gift_name: giftName,
-        coin_cost: parseInt(giftCoins, 10)
+        coin_cost: parseInt(giftCoins, 10),
+        user_id: userId
     };
+
+    console.log('Adding new gift with payload:', newGift); // Debugging line
 
     try {
         const response = await fetch('http://localhost:8080/api/gift-shop', {
