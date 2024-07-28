@@ -402,7 +402,7 @@ function submitHandler(event, taskName) {
         publish_task_coins: coins,
         publish_task_deadline: deadline,
         publish_task_assigned_to: kidName,
-        kid_id: kidId,
+        kidId: kidId,
         userId: userId
     };
 

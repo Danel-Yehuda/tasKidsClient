@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', function() {
         profilePicElement.src = "images/kid1.jpg";
         document.getElementById('kidsNav').style.display = 'none';
         document.getElementById('tasksNav').style.display = 'none';
-
     }
+
     // Fetch and display publish tasks
-    fetchPublishTasks();
+    fetchPublishTasks(user, kid);
 });
 
 function formatDate(date) {
@@ -32,9 +32,16 @@ function formatDate(date) {
     return `${day}/${month}/${year}`;
 }
 
-async function fetchPublishTasks() {
+async function fetchPublishTasks(user, kid) {
+    let url = 'http://localhost:8080/api/publish-tasks';
+    if (user) {
+        url += `?userId=${user.data.user_id}`;
+    } else if (kid) {
+        url += `?kidId=${kid.data.kid_id}`;
+    }
+
     try {
-        const response = await fetch('http://localhost:8080/api/publish-tasks');
+        const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
