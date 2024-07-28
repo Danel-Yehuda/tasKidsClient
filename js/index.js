@@ -1,8 +1,12 @@
 $(document).ready(function() {
-
     if (sessionStorage.getItem('user')) {
         window.location.href = 'home.html';
     }
+
+    $('#logo').on('click', function() {
+        $('#signin-section, #signup-section').hide();
+        $('#kids-signin-section').show();
+    });
 
     $('#show-signup').on('click', function(event) {
         event.preventDefault();
@@ -18,7 +22,7 @@ $(document).ready(function() {
 
     $('#signup-form').on('submit', function(event) {
         event.preventDefault();
-        
+
         const userData = {
             firstName: $('#firstName').val(),
             lastName: $('#lastName').val(),
@@ -36,21 +40,15 @@ $(document).ready(function() {
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                // Handle error response
-                document.getElementById('signup-error').textContent = data.message;
-                document.getElementById('signup-error').style.display = 'block';
+                $('#signup-error').text(data.message).show();
             } else {
-                // Handle success response
-                console.log(data);
                 sessionStorage.setItem('user', JSON.stringify(data));
                 window.location.href = 'home.html';
             }
         })
         .catch(error => {
-            // Handle network or other errors
             console.error('Error:', error);
-            document.getElementById('signup-error').textContent = 'An error occurred during sign up.';
-            document.getElementById('signup-error').style.display = 'block';
+            $('#signup-error').text('An error occurred during sign up.').show();
         });
     });
 
@@ -72,21 +70,45 @@ $(document).ready(function() {
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                // Handle error response
-                document.getElementById('signin-error').textContent = data.message;
-                document.getElementById('signin-error').style.display = 'block';
+                $('#signin-error').text(data.message).show();
             } else {
-                // Handle success response
-                console.log(data);
                 sessionStorage.setItem('user', JSON.stringify(data));
                 window.location.href = 'home.html';
             }
         })
         .catch(error => {
-            // Handle network or other errors
             console.error('Error:', error);
-            document.getElementById('signin-error').textContent = 'An error occurred during sign in.';
-            document.getElementById('signin-error').style.display = 'block';
+            $('#signin-error').text('An error occurred during sign in.').show();
+        });
+    });
+
+    $('#kids-signin-form').on('submit', function(event) {
+        event.preventDefault();
+
+        const kidLoginData = {
+            parent_email: $('#parent-email').val(),
+            kid_password: $('#kid-password').val()
+        };
+
+        fetch('http://localhost:8080/api/kids/signin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(kidLoginData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                $('#kids-signin-error').text(data.message).show();
+            } else {
+                sessionStorage.setItem('kid', JSON.stringify(data));
+                window.location.href = 'home.html';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            $('#kids-signin-error').text('An error occurred during kid sign in.').show();
         });
     });
 });
