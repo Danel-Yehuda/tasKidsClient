@@ -47,6 +47,21 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         editTask();
     });
+
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const kid = JSON.parse(sessionStorage.getItem('kid'));
+    console.log('User:', user);
+    console.log('Kid:', kid);
+    const profilePicElement = document.getElementById('profilePic');
+
+    if (user) {
+        profilePicElement.src = "images/Picture1.png";
+    }
+    if (kid) {
+        profilePicElement.src = "images/kid1.jpg";
+        document.getElementById('kidsNav').style.display = 'none';
+        document.getElementById('tasksNav').style.display = 'none';
+    }
 });
 
 function formatDate(date) {
