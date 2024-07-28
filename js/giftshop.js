@@ -89,7 +89,7 @@ async function addGift(addGiftModal) {
 
         await fetchGifts();
 
-        addGiftModal.hide();
+        addGiftModal.hide(); // Hide the modal using the modal instance
         document.getElementById('add-gift-form').reset();
     } catch (error) {
         console.error('Error adding gift:', error);
