@@ -274,7 +274,6 @@ function appendNewTask(task) {
     li.appendChild(div);
     ul.appendChild(li);
 
-    // Re-register the event listeners for the new task elements
     deleteIcon.addEventListener('click', function () {
         const taskToDelete = this.closest('li');
         deleteTask(taskToDelete);
@@ -289,7 +288,6 @@ function appendNewTask(task) {
 function AddNewTask() {
     const taskName = document.getElementById('taskName').value;
 
-    // Retrieve the user object from session storage
     const user = JSON.parse(sessionStorage.getItem('user'));
     const userId = user ? user.data.user_id : null; // Adjust the key according to your user object structure
 
@@ -315,11 +313,10 @@ function AddNewTask() {
     taskModal.hide();
 }
 
-
 function DeleteTask() {
     const trashIcons = document.getElementsByClassName("bi-trash");
     let taskToDelete = null;
-    
+
     Array.from(trashIcons).forEach(icon => {
         icon.addEventListener('click', function () {
             taskToDelete = this.closest('li');
@@ -330,7 +327,7 @@ function DeleteTask() {
     document.getElementById('confirmDelete').addEventListener('click', function () {
         if (taskToDelete) {
             const taskId = taskToDelete.dataset.taskId;
-    
+
             fetch(`http://localhost:8080/api/tasks/${taskId}`, {
                 method: 'DELETE',
             })
@@ -343,7 +340,7 @@ function DeleteTask() {
                 }
             })
             .catch(error => console.error('Error deleting task:', error));
-    
+
             deleteModal.hide();
         }
     });
