@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Task Details</title>
+    <title>Kids Management</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/taskPage.css" />
+    <link rel="stylesheet" href="css/kids.css" />
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-    <script src="js/taskPage.js"></script>
+    <script src="js/kids.js" defer></script>
 </head>
 
 <body>
@@ -34,12 +34,12 @@
                         <a class="nav-link" href="ListOfTasks.html">Tasks</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="giftshop.html">GiftShop</a>
+                        <a class="nav-link" href="giftShop.html">GiftShop</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0 d-none d-lg-flex">
                     <div class="search-input">
-                        <i id="searchIcon" class="fa fa-search"></i>
+                        <i class="fa fa-search"></i>
                         <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" />
                     </div>
                 </form>
@@ -50,69 +50,61 @@
             </div>
         </nav>
     </header>
-    <main>
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="d-flex align-items-center">
-                        <h1 id="task-title">Task Name</h1>
-                        <div id="edit-task"><i class="fas fa-pen-to-square ml-3 icon-large"></i></div>
-                        <div id="delete-task"><i class="fas fa-trash ml-2 icon-large"></i></div>
-                    </div>
-                    <div class="task-details mt-4">
-                        <p><strong>Assigned to:</strong> <span id="task-assigned-to"></span></p>
-                        <p><strong>Deadline:</strong> <span id="task-deadline"></span></p>
-                        <p><strong>Status:</strong> <span id="task-status"></span></p>
-                        <p><strong>Coins:</strong> <span id="task-coins"></span></p>
-                    </div>
-                    <div class="task-actions mt-4">
-                        <button class="btn btn-success">Approve</button>
-                        <button class="btn btn-danger">Disapprove</button>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <h2>History</h2>
-                    <ul id="task-history" class="list-group mt-3">
-                        <!-- History items will be inserted here by JavaScript -->
-                    </ul>
-                </div>
-            </div>
+    <main class="container mt-5">
+        <h1>Kids Management</h1>
+        <button class="btn btn-primary mb-3" id="addKidBtn">Add Kid</button>
+        <div class="row" id="kidsList">
+            <!-- Kids cards will be dynamically added here -->
         </div>
-        <!-- Edit Task Modal -->
-        <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+        <!-- Add Kid Modal -->
+        <div class="modal fade" id="addKidModal" tabindex="-1" aria-labelledby="addKidModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                        <h5 class="modal-title" id="addKidModalLabel">Add Kid</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editTaskForm">
+                        <form id="addKidForm">
                             <div class="form-group">
-                                <label for="editTaskName">Task Name</label>
-                                <input type="text" class="form-control" id="editTaskName" required>
+                                <label for="kidName">Kid Name</label>
+                                <input type="text" class="form-control" id="kidName" required>
                             </div>
                             <div class="form-group">
-                                <label for="editTaskAssignedTo">Assigned To</label>
-                                <input type="text" class="form-control" id="editTaskAssignedTo" required>
+                                <label for="kidPassword">Password</label>
+                                <input type="password" class="form-control" id="kidPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Kid</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Edit Kid Modal -->
+        <div class="modal fade" id="editKidModal" tabindex="-1" aria-labelledby="editKidModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editKidModalLabel">Edit Kid</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editKidForm">
+                            <div class="form-group">
+                                <label for="editKidName">Kid Name</label>
+                                <input type="text" class="form-control" id="editKidName" required>
                             </div>
                             <div class="form-group">
-                                <label for="editTaskDeadline">Deadline</label>
-                                <input type="date" class="form-control" id="editTaskDeadline" required>
+                                <label for="editKidCoins">Coins</label>
+                                <input type="number" class="form-control" id="editKidCoins" required>
                             </div>
                             <div class="form-group">
-                                <label for="editTaskCoins">Coins</label>
-                                <input type="number" class="form-control" id="editTaskCoins" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="editTaskStatus">Status</label>
-                                <select class="form-control" id="editTaskStatus" required>
-                                    <option value="1">Not started yet</option>
-                                    <option value="2">In Progress</option>
-                                    <option value="3">Completed</option>
-                                </select>
+                                <label for="editKidTasksDone">Tasks Done</label>
+                                <input type="number" class="form-control" id="editKidTasksDone" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </form>
@@ -120,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <!-- Delete Task Modal -->
+        <!-- Delete Kid Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -131,7 +123,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this task?
+                        Are you sure you want to delete this kid?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="cancelDelete" data-dismiss="modal">No</button>
