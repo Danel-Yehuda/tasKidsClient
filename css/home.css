@@ -224,3 +224,15 @@ nav {
         margin-bottom: 10px;
     }
 }
+
+#kid-savings {
+    font-size: 1.7rem;
+    color: #e6ad05; /* Gold color for coins */
+    display: flex;
+    align-items: center;
+}
+
+#kid-savings i {
+    margin-right: 5px;
+}
+

@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('User:', user);
     console.log('Kid:', kid);
     const profilePicElement = document.getElementById('profilePic');
+    const kidSavingsElement = document.getElementById('kid-savings');
+    const savingsAmountElement = document.getElementById('savings-amount');
 
     if (user) {
         profilePicElement.src = "images/Picture1.png";
@@ -19,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         profilePicElement.src = "images/kid1.jpg";
         document.getElementById('kidsNav').style.display = 'none';
         document.getElementById('tasksNav').style.display = 'none';
+        kidSavingsElement.style.display = 'block';
+        savingsAmountElement.textContent = kid.data.kid_coins;
     }
 
     // Fetch and display publish tasks
