@@ -1,25 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Logout button functionality
-    document.querySelector('.btn-outline-danger').addEventListener('click', function () {
-        sessionStorage.removeItem('user');
-        window.location.href = 'index.html';
-    });
-
-    // Initialize the Bootstrap modal
     const addGiftModal = new bootstrap.Modal(document.getElementById('addGiftModal'));
-
-    // Show the modal when the "Add Gift" button is clicked
     document.getElementById('add-gift-button').addEventListener('click', function () {
         addGiftModal.show();
     });
 
-    // Handle form submission
-    document.getElementById('add-gift-form').addEventListener('submit', async function (event) {
+    const addGiftForm = document.getElementById('add-gift-form');
+    addGiftForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        await addGift();
+        addGift(addGiftModal);
     });
 
-    // Fetch and display gifts
     fetchGifts();
 });
 
@@ -42,7 +32,7 @@ async function fetchGifts() {
     }
 }
 
-async function renderGifts(gifts) {
+function renderGifts(gifts) {
     const giftCardsContainer = document.getElementById('gift-cards');
     giftCardsContainer.innerHTML = '';
 
@@ -54,27 +44,31 @@ async function renderGifts(gifts) {
         card.className = 'card col-md-3';
         card.innerHTML = `
             <i class="icon fas fa-gift"></i>
-            <div class="title">${gift.name}</div>
+            <div class="title">${gift.gift_name}</div>
             <div class="details">
-                <div class="coins"><span>${gift.coins}</span> <i id="coinIcon" class="fas fa-coins"></i></div>
+                <div class="coins"><span>${gift.coin_cost}</span> <i id="coinIcon" class="fas fa-coins"></i></div>
                 <div class="subDetails">
                     <button class="btn btn-primary mt-2">Buy Gift</button>
                 </div>
             </div>
         `;
-
         row.appendChild(card);
     });
     giftCardsContainer.appendChild(row);
 }
 
-async function addGift() {
+async function addGift(addGiftModal) {
     const giftName = document.getElementById('gift-name').value;
     const giftCoins = document.getElementById('gift-coins').value;
 
+    if (!giftName || !giftCoins) {
+        console.error('Gift name or coins are missing');
+        return;
+    }
+
     const newGift = {
-        name: giftName,
-        coins: giftCoins
+        gift_name: giftName,
+        coin_cost: parseInt(giftCoins, 10)
     };
 
     try {
@@ -95,8 +89,7 @@ async function addGift() {
 
         await fetchGifts();
 
-        const addGiftModal = bootstrap.Modal.getInstance(document.getElementById('addGiftModal'));
-        addGiftModal.hide();
+        addGiftModal.hide(); // Hide the modal using the modal instance
         document.getElementById('add-gift-form').reset();
     } catch (error) {
         console.error('Error adding gift:', error);
