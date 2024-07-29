@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (user) {
         profilePicElement.src = "images/Picture1.png";
+        fetchMessages(user.data.user_id, 'user'); // Fetch messages for parent
     }
     if (kid) {
         profilePicElement.src = "images/kid1.jpg";
@@ -23,8 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('tasksNav').style.display = 'none';
         kidSavingsElement.style.display = 'block';
         savingsAmountElement.textContent = kid.data.kid_coins;
-        // Fetch and display messages
-        fetchMessages(kid.data.kid_id);
+        fetchMessages(kid.data.kid_id, 'kid'); // Fetch messages for kid
     }
 
     // Fetch and display publish tasks
@@ -69,37 +69,40 @@ function renderPublishTasks(tasks) {
     taskCardsContainer.innerHTML = ''; // Clear existing tasks if any
 
     tasks.forEach((task, index) => {
-        const formattedDate = formatDate(new Date(task.publish_task_deadline));
-        const card = document.createElement('div');
-        card.classList.add('card', 'col-md-3');
+        if (task.approve !== 1) { // Filter out approved tasks
+            const formattedDate = formatDate(new Date(task.publish_task_deadline));
+            const card = document.createElement('div');
+            card.classList.add('card', 'col-md-3');
 
-        card.classList.add(task.publish_task_status == '3' ? 'green' : task.publish_task_status == '2' ? 'yellow' : 'red');
-        card.setAttribute('data-index', index);
+            card.classList.add(task.publish_task_status == '3' ? 'green' : task.publish_task_status == '2' ? 'yellow' : 'red');
+            card.setAttribute('data-index', index);
 
-        card.innerHTML = `
-            <i class="icon fas fa-lightbulb"></i>
-            <div class="title">${task.publish_task_name}</div>
-            <div class="details">
-                <div class="coins"><span>${task.publish_task_coins}</span> <i id="coinIcon" class="fas fa-coins"></i></div>
-                <div class="subDetails">
-                    <div class="assigned-to">Assigned to: ${task.publish_task_assigned_to}</div>
-                    <div class="deadline">Deadline: ${formattedDate}</div>
+            card.innerHTML = `
+                <i class="icon fas fa-lightbulb"></i>
+                <div class="title">${task.publish_task_name}</div>
+                <div class="details">
+                    <div class="coins"><span>${task.publish_task_coins}</span> <i id="coinIcon" class="fas fa-coins"></i></div>
+                    <div class="subDetails">
+                        <div class="assigned-to">Assigned to: ${task.publish_task_assigned_to}</div>
+                        <div class="deadline">Deadline: ${formattedDate}</div>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        card.addEventListener('click', function() {
-            sessionStorage.setItem('selectedTask', JSON.stringify(task));
-            window.location.href = 'taskPage.html';
-        });
+            card.addEventListener('click', function() {
+                sessionStorage.setItem('selectedTask', JSON.stringify(task));
+                window.location.href = 'taskPage.html';
+            });
 
-        taskCardsContainer.appendChild(card);
+            taskCardsContainer.appendChild(card);
+        }
     });
 }
 
-async function fetchMessages(kidId) {
+async function fetchMessages(id, userType) {
+    console.log('Fetching messages for', userType, 'with ID:', id);
     try {
-        const response = await fetch(`http://localhost:8080/api/messages/${kidId}`);
+        const response = await fetch(`http://localhost:8080/api/messages/${userType}/${id}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -109,11 +112,11 @@ async function fetchMessages(kidId) {
         const messageList = document.getElementById('message-list');
         messageList.innerHTML = ''; // Clear existing messages
 
-        if (messages.length > 0) {
-            messages.forEach(message => {
+        if (messages.data.length > 0) {
+            messages.data.forEach(message => {
                 const listItem = document.createElement('li');
                 listItem.classList.add('list-group-item');
-                listItem.textContent = message;
+                listItem.textContent = `${formatDate(new Date(message.timestamp))} - ${message.message}`;
                 messageList.appendChild(listItem);
             });
         } else {

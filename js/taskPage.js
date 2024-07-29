@@ -1,9 +1,8 @@
-let editTaskModal;
-let deleteTaskModal;
-let currentTaskId = ''; // Add this variable to store the current task ID
-
 document.addEventListener('DOMContentLoaded', function() {
     const task = JSON.parse(sessionStorage.getItem('selectedTask'));
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const kid = JSON.parse(sessionStorage.getItem('kid'));
+
     if (task) {
         currentTaskId = task.publish_task_id;
         document.getElementById('task-title').textContent = task.publish_task_name;
@@ -52,8 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
         editTask();
     });
 
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    const kid = JSON.parse(sessionStorage.getItem('kid'));
     console.log('User:', user);
     console.log('Kid:', kid);
     const profilePicElement = document.getElementById('profilePic');
@@ -73,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('kid-actions').style.display = 'block';
 
         const startTaskButton = document.getElementById('start-task-btn');
-        
+
         if(task.publish_task_status === '2'){
             console.log('Task in progress');
             startTaskButton.textContent = 'I\'m Done!'
@@ -163,14 +160,17 @@ function deleteTask(taskId) {
 }
 
 function updateTaskStatus(status) {
-    console.log(currentTaskId, status);
+    const kid = JSON.parse(sessionStorage.getItem('kid'));
+
     fetch(`http://localhost:8080/api/publish-tasks/status/${currentTaskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            publish_task_status: status
+            publish_task_status: status,
+            kidId: kid.data.kid_id,
+            kidName: kid.data.kid_name
         })
     })
     .then(response => response.json())
