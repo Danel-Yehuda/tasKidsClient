@@ -89,6 +89,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    document.getElementById('approve-btn').addEventListener('click', function() {
+        if (task.publish_task_status !== "3") {
+            alert('Task must be completed before it can be approved.');
+        } else {
+            approveTask(currentTaskId);
+        }
+    });
 });
 
 function formatDate(date) {
@@ -168,6 +176,21 @@ function updateTaskStatus(status) {
         updateTaskInDOM(data.data);
     })
     .catch(error => console.error('Error updating task status:', error));
+}
+
+function approveTask(taskId) {
+    fetch(`http://localhost:8080/api/publish-tasks/approve/${taskId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Task approved:', data);
+        updateTaskInDOM(data.data);
+    })
+    .catch(error => console.error('Error approving task:', error));
 }
 
 function updateTaskInDOM(task) {
