@@ -94,7 +94,7 @@ nav {
 
 h1 {
     font-family: 'Poppins', sans-serif;
-    font-size: 50px;
+    font-size: 60px;
     font-weight: bold;
     color: #FF6F61;
     text-align: center;
@@ -113,7 +113,7 @@ h1::after {
 }
 
 #add-gift-button {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: normal;
     padding: 10px 20px;
     margin-bottom: 20px;
@@ -187,6 +187,10 @@ h1::after {
 
 .card .subDetails {
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .card .subDetails button {
@@ -197,7 +201,6 @@ h1::after {
     padding: 10px 20px;
     font-size: 1.2em;
     cursor: pointer;
-
     transition: background-color 0.3s ease;
 }
 
@@ -231,27 +234,34 @@ h1::after {
 
 .subDetails {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     margin-top: 1rem;
-    /* Adjust the margin as needed */
+    height: 100%;
 }
 
 .icon-container {
     display: flex;
     gap: 0.5rem;
-    /* Space between icons */
 }
 
 .icon-large {
     font-size: 2.5rem;
-    /* Adjust the size as needed */
     cursor: pointer;
-    /* Add cursor pointer to indicate clickable icons */
 }
 
 .btn-secondary,
 .btn-danger {
     color: white;
+}
 
+#kid-savings {
+    font-size: 1.7rem;
+    color: #e6ad05;
+    display: flex;
+    align-items: center;
+}
+
+#kid-savings i {
+    margin-right: 5px;
 }
