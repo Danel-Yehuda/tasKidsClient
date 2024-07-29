@@ -1,9 +1,8 @@
-let editTaskModal;
-let deleteTaskModal;
-let currentTaskId = ''; // Add this variable to store the current task ID
-
 document.addEventListener('DOMContentLoaded', function() {
     const task = JSON.parse(sessionStorage.getItem('selectedTask'));
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const kid = JSON.parse(sessionStorage.getItem('kid'));
+
     if (task) {
         currentTaskId = task.publish_task_id;
         document.getElementById('task-title').textContent = task.publish_task_name;
@@ -37,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('confirmDelete').addEventListener('click', function() {
             deleteTask(currentTaskId);
         });
+
+        fetchTaskHistory(task.publish_task_name); // Fetch task history
+
     } else {
         console.error('No task data found in sessionStorage');
     }
@@ -49,8 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
         editTask();
     });
 
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    const kid = JSON.parse(sessionStorage.getItem('kid'));
     console.log('User:', user);
     console.log('Kid:', kid);
     const profilePicElement = document.getElementById('profilePic');
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('kid-actions').style.display = 'block';
 
         const startTaskButton = document.getElementById('start-task-btn');
-        
+
         if(task.publish_task_status === '2'){
             console.log('Task in progress');
             startTaskButton.textContent = 'I\'m Done!'
@@ -89,6 +89,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    document.getElementById('approve-btn').addEventListener('click', function() {
+        if (task.publish_task_status !== "3") {
+            alert('Task must be completed before it can be approved.');
+        } else {
+            approveTask(currentTaskId);
+        }
+    });
 });
 
 function formatDate(date) {
@@ -152,14 +160,17 @@ function deleteTask(taskId) {
 }
 
 function updateTaskStatus(status) {
-    console.log(currentTaskId, status);
+    const kid = JSON.parse(sessionStorage.getItem('kid'));
+
     fetch(`http://localhost:8080/api/publish-tasks/status/${currentTaskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            publish_task_status: status
+            publish_task_status: status,
+            kidId: kid.data.kid_id,
+            kidName: kid.data.kid_name
         })
     })
     .then(response => response.json())
@@ -168,6 +179,21 @@ function updateTaskStatus(status) {
         updateTaskInDOM(data.data);
     })
     .catch(error => console.error('Error updating task status:', error));
+}
+
+function approveTask(taskId) {
+    fetch(`http://localhost:8080/api/publish-tasks/approve/${taskId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Task approved:', data);
+        updateTaskInDOM(data.data);
+    })
+    .catch(error => console.error('Error approving task:', error));
 }
 
 function updateTaskInDOM(task) {
@@ -187,4 +213,31 @@ function updateTaskInDOM(task) {
         taskStatusElement.textContent = 'Completed';
         taskStatusElement.style.color = 'green';
     }
+}
+
+function fetchTaskHistory(taskName) {
+    fetch(`http://localhost:8080/api/history/task/${taskName}`)
+        .then(response => response.json())
+        .then(historyData => {
+            const historyList = document.getElementById('task-history');
+            historyList.innerHTML = ''; // Clear existing history items
+
+            if (historyData.data.length > 0) {
+                historyData.data.forEach(history => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+
+                    const actionClass = history.action.toLowerCase() === 'approved' ? 'text-success' : 'text-danger';
+
+                    listItem.innerHTML = `<strong>${formatDate(new Date(history.date))}</strong> ${history.kid} - <span class="${actionClass}">${history.action}</span>`;
+                    historyList.appendChild(listItem);
+                });
+            } else {
+                const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item');
+                listItem.innerHTML = `No history available for this task.`;
+                historyList.appendChild(listItem);
+            }
+        })
+        .catch(error => console.error('Error fetching history:', error));
 }
