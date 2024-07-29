@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('approve-btn').addEventListener('click', function() {
-        if (task.publish_task_status !== 3) {
+        if (task.publish_task_status !== "3") {
             alert('Task must be completed before it can be approved.');
         } else {
             approveTask(currentTaskId);

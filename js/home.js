@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('tasksNav').style.display = 'none';
         kidSavingsElement.style.display = 'block';
         savingsAmountElement.textContent = kid.data.kid_coins;
+        // Fetch and display messages
+        fetchMessages(kid.data.kid_id);
     }
 
     // Fetch and display publish tasks
@@ -93,4 +95,34 @@ function renderPublishTasks(tasks) {
 
         taskCardsContainer.appendChild(card);
     });
+}
+
+async function fetchMessages(kidId) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/messages/${kidId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const messages = await response.json();
+        console.log('Messages:', messages);
+
+        const messageList = document.getElementById('message-list');
+        messageList.innerHTML = ''; // Clear existing messages
+
+        if (messages.length > 0) {
+            messages.forEach(message => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item');
+                listItem.textContent = message;
+                messageList.appendChild(listItem);
+            });
+        } else {
+            const listItem = document.createElement('li');
+            listItem.classList.add('list-group-item');
+            listItem.textContent = 'No messages available.';
+            messageList.appendChild(listItem);
+        }
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+    }
 }

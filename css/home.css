@@ -236,3 +236,11 @@ nav {
     margin-right: 5px;
 }
 
+
+#messages li {
+    font-size: 1.2em;
+    margin: 10px 0;
+    background: linear-gradient(30deg, #9b5de5, #f15bb5, #fee440, #00bbf9, #00f5d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
