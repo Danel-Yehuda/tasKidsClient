@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('confirmDelete').addEventListener('click', function() {
             deleteTask(currentTaskId);
         });
+
+        fetchTaskHistory(task.publish_task_name); // Fetch task history
+
     } else {
         console.error('No task data found in sessionStorage');
     }
@@ -91,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('approve-btn').addEventListener('click', function() {
-        if (task.publish_task_status !== "3") {
+        if (task.publish_task_status !== 3) {
             alert('Task must be completed before it can be approved.');
         } else {
             approveTask(currentTaskId);
@@ -210,4 +213,31 @@ function updateTaskInDOM(task) {
         taskStatusElement.textContent = 'Completed';
         taskStatusElement.style.color = 'green';
     }
+}
+
+function fetchTaskHistory(taskName) {
+    fetch(`http://localhost:8080/api/history/task/${taskName}`)
+        .then(response => response.json())
+        .then(historyData => {
+            const historyList = document.getElementById('task-history');
+            historyList.innerHTML = ''; // Clear existing history items
+
+            if (historyData.data.length > 0) {
+                historyData.data.forEach(history => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+
+                    const actionClass = history.action.toLowerCase() === 'approved' ? 'text-success' : 'text-danger';
+
+                    listItem.innerHTML = `<strong>${formatDate(new Date(history.date))}</strong> ${history.kid} - <span class="${actionClass}">${history.action}</span>`;
+                    historyList.appendChild(listItem);
+                });
+            } else {
+                const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item');
+                listItem.innerHTML = `No history available for this task.`;
+                historyList.appendChild(listItem);
+            }
+        })
+        .catch(error => console.error('Error fetching history:', error));
 }
