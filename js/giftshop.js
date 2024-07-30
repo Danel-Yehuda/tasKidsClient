@@ -27,15 +27,22 @@ document.addEventListener('DOMContentLoaded', function () {
         profilePicElement.src = "images/Picture1.png";
     }
 
-    if (kid) {
-        profilePicElement.src = "images/kid1.jpg";
-        document.getElementById('kidsNav').style.display = 'none';
-        document.getElementById('tasksNav').style.display = 'none';
-        addGiftButton.style.display = 'none';
-        kidSavingsElement.style.display = 'block';
-        savingsAmountElement.textContent = kid.data.kid_coins;
-    }
-
+   if (kid) {
+    fetch(`https://taskidserver.onrender.com/api/kids/${kid.data.kid_id}`)
+        .then(response => response.json())
+        .then(updatedKid => {
+            console.log('Updated kid data:', updatedKid);
+            sessionStorage.setItem('kid', JSON.stringify(updatedKid));
+            profilePicElement.src = "images/kid1.jpg";
+            document.getElementById('kidsNav').style.display = 'none';
+            document.getElementById('tasksNav').style.display = 'none';
+            addGiftButton.style.display = 'none';
+            kidSavingsElement.style.display = 'block';
+            savingsAmountElement.textContent = updatedKid.data.kid_coins;
+            fetchMessages(updatedKid.data.kid_id, 'kid');
+        })
+        .catch(error => console.error('Error fetching updated kid data:', error));
+    }
     const addGiftModal = new bootstrap.Modal(document.getElementById('addGiftModal'));
     document.getElementById('add-gift-button').addEventListener('click', function () {
         addGiftModal.show();
@@ -316,7 +323,7 @@ async function buyGift(giftId) {
 
     const kidId = kid.data.kid_id;
     try {
-        const response = await fetch(`http://localhost:8080/api/gift-shop/buy/${giftId}`, {
+        const response = await fetch(`https://taskidserver.onrender.com/api/gift-shop/buy/${giftId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
