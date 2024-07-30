@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchMessages(user.data.user_id, 'user'); // Fetch messages for parent
     }
     if (kid) {
-        fetch(`http://localhost:8080/api/kids/${kid.data.kid_id}`)
+        fetch(`https://taskidserver.onrender.com/api/kids/${kid.data.kid_id}`)
         .then(response => response.json())
         .then(updatedKid => {
             console.log('Updated kid data:', updatedKid);
@@ -46,7 +46,7 @@ function formatDate(date) {
 }
 
 async function fetchPublishTasks(user, kid) {
-    let url = 'http://localhost:8080/api/publish-tasks';
+    let url = 'https://taskidserver.onrender.com/api/publish-tasks';
     if (user) {
         url += `?userId=${user.data.user_id}`;
     } else if (kid) {
@@ -145,7 +145,7 @@ function showColorOptions(card, taskId) {
 function changeCardColor(card, color, taskId) {
     card.style.backgroundColor = color;
 
-    fetch(`http://localhost:8080/api/publish-tasks/color/${taskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/color/${taskId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ function changeCardColor(card, color, taskId) {
 async function fetchMessages(id, userType) {
     console.log('Fetching messages for', userType, 'with ID:', id);
     try {
-        const response = await fetch(`http://localhost:8080/api/messages/${userType}/${id}`);
+        const response = await fetch(`https://taskidserver.onrender.com/api/messages/${userType}/${id}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }

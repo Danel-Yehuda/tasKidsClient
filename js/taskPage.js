@@ -127,7 +127,7 @@ function editTask() {
     const coins = document.getElementById('editTaskCoins').value;
     const status = document.getElementById('editTaskStatus').value;
 
-    fetch(`http://localhost:8080/api/publish-tasks/${currentTaskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/${currentTaskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -151,7 +151,7 @@ function editTask() {
 }
 
 function deleteTask(taskId) {
-    fetch(`http://localhost:8080/api/publish-tasks/${taskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/${taskId}`, {
         method: 'DELETE'
     })
     .then(response => {
@@ -168,7 +168,7 @@ function deleteTask(taskId) {
 function updateTaskStatus(status) {
     const kid = JSON.parse(sessionStorage.getItem('kid'));
 
-    fetch(`http://localhost:8080/api/publish-tasks/status/${currentTaskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/status/${currentTaskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -188,7 +188,7 @@ function updateTaskStatus(status) {
 }
 
 function approveTask(taskId) {
-    fetch(`http://localhost:8080/api/publish-tasks/approve/${taskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/approve/${taskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -222,7 +222,7 @@ function updateTaskInDOM(task) {
 }
 
 function fetchTaskHistory(taskName) {
-    fetch(`http://localhost:8080/api/history/task/${taskName}`)
+    fetch(`https://taskidserver.onrender.com/api/history/task/${taskName}`)
         .then(response => response.json())
         .then(historyData => {
             const historyList = document.getElementById('task-history');

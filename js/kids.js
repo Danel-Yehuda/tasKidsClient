@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadKids() {
-    fetch("http://localhost:8080/api/kids")
+    fetch("https://taskidserver.onrender.com/api/kids")
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -70,7 +70,7 @@ function addKid() {
         kid_tasks_done: 0
     };
 
-    fetch("http://localhost:8080/api/kids", {
+    fetch("https://taskidserver.onrender.com/api/kids", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -132,7 +132,7 @@ function editKid() {
     const kidCoins = document.getElementById('editKidCoins').value;
     const kidTasksDone = document.getElementById('editKidTasksDone').value;
 
-    fetch(`http://localhost:8080/api/kids/${currentKidId}`, {
+    fetch(`https://taskidserver.onrender.com/api/kids/${currentKidId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -163,7 +163,7 @@ function updateKidCard(kid) {
 }
 
 function deleteKid(kidId) {
-    fetch(`http://localhost:8080/api/kids/${kidId}`, {
+    fetch(`https://taskidserver.onrender.com/api/kids/${kidId}`, {
         method: 'DELETE'
     })
     .then(response => {
