@@ -1,9 +1,13 @@
 let giftToDelete;
+let deleteModal
 let editGiftModal;
 let giftToEdit;
+let buyGiftModal;
+let giftToBuy;
+let successModal;
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.btn-outline-danger').addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.btn-outline-danger').addEventListener('click', function () {
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('kid');
         window.location.href = 'index.html';
@@ -18,11 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const kidSavingsElement = document.getElementById('kid-savings');
     const savingsAmountElement = document.getElementById('savings-amount');
     const addGiftButton = document.getElementById('add-gift-button');
-    const buyGiftButton = document.getElementById('buy-gift-button');
 
     if (user) {
         profilePicElement.src = "images/Picture1.png";
-        if (buyGiftButton) buyGiftButton.style.display = 'none';
     }
 
     if (kid) {
@@ -35,9 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const addGiftModal = new bootstrap.Modal(document.getElementById('addGiftModal'));
-    deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-    editGiftModal = new bootstrap.Modal(document.getElementById('editGiftModal'));
-
     document.getElementById('add-gift-button').addEventListener('click', function () {
         addGiftModal.show();
     });
@@ -50,11 +49,33 @@ document.addEventListener('DOMContentLoaded', function() {
         addGift(addGiftModal, userId);
     });
 
+    deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+    editGiftModal = new bootstrap.Modal(document.getElementById('editGiftModal'));
     const editGiftForm = document.getElementById('edit-gift-form');
     editGiftForm.addEventListener('submit', function (event) {
         event.preventDefault();
         const giftId = giftToEdit.dataset.giftId;
         editGift(giftId);
+    });
+
+    buyGiftModal = new bootstrap.Modal(document.getElementById('buyGiftModal'));
+    document.querySelectorAll('.buy-gift-button').forEach(button => {
+        button.addEventListener('click', function () {
+            giftToBuy = this.closest('.card');
+            buyGiftModal.show();
+        });
+    });
+
+    const buyGiftForm = document.getElementById('buy-gift-form');
+    buyGiftForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (giftToBuy) {
+            const giftId = giftToBuy.dataset.giftId;
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            const userId = user ? user.data.user_id : null;
+            buyGift(giftId);
+        }
     });
 
     fetchGifts();
@@ -66,15 +87,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.getElementById('cancelDelete').addEventListener('click', function () {
-        deleteModal.hide();
-    });
+    successModal = new bootstrap.Modal(document.getElementById('successModal'));
 
-    document.querySelectorAll('.btn-close').forEach(function (element) {
+    document.querySelectorAll('.btn-close, .btn-secondary, .btn-primary').forEach(function (element) {
         element.addEventListener('click', function () {
             addGiftModal.hide();
             deleteModal.hide();
             editGiftModal.hide();
+            buyGiftModal.hide();
+            successModal.hide();
         });
     });
 });
@@ -158,7 +179,15 @@ function renderGifts(gifts) {
             openEditModal(giftToEdit);
         });
     });
+
+    document.querySelectorAll('.buy-gift-button').forEach(button => {
+        button.addEventListener('click', function () {
+            giftToBuy = this.closest('.card');
+            buyGiftModal.show();
+        });
+    });
 }
+
 
 function openEditModal(gift) {
     const giftId = gift.dataset.giftId;
@@ -274,5 +303,40 @@ function updateGiftInDOM(giftId, giftName, giftCoins) {
     if (giftElement) {
         giftElement.querySelector('.title').textContent = giftName;
         giftElement.querySelector('.coins span').textContent = giftCoins;
+    }
+}
+async function buyGift(giftId) {
+    buyGiftModal.hide();
+
+    const kid = JSON.parse(sessionStorage.getItem('kid'));
+    if (!kid) {
+        alert('You must be logged in to buy a gift.');
+        return;
+    }
+
+    const kidId = kid.data.kid_id;
+    try {
+        const response = await fetch(`http://localhost:8080/api/gift-shop/buy/${giftId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ kidId })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log('Gift purchased:', result);
+
+        await fetchGifts();
+
+        buyGiftModal.hide();
+        successModal.show();
+    } catch (error) {
+        console.error('Error purchasing gift:', error);
+        alert('There was an error purchasing the gift. Please try again.');
     }
 }
