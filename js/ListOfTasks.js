@@ -67,6 +67,12 @@ window.onload = () => {
         event.preventDefault();
         EditTask();
     });
+
+    document.querySelector('.btn-outline-danger').addEventListener('click', function() {
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('kid');
+        window.location.href = 'index.html';
+    });
 };
 
 function addPublishEventListeners() {

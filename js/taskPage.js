@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const kid = JSON.parse(sessionStorage.getItem('kid'));
 
+    document.querySelector('.btn-outline-danger').addEventListener('click', function() {
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('kid');
+        window.location.href = 'index.html';
+    });
+
     if (task) {
         currentTaskId = task.publish_task_id;
         document.getElementById('task-title').textContent = task.publish_task_name;

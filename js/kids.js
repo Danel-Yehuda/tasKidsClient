@@ -4,6 +4,13 @@ let deleteKidModal;
 let currentKidId = '';
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    document.querySelector('.btn-outline-danger').addEventListener('click', function() {
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('kid');
+        window.location.href = 'index.html';
+    });
+
     addKidModal = new bootstrap.Modal(document.getElementById('addKidModal'));
     editKidModal = new bootstrap.Modal(document.getElementById('editKidModal'));
     deleteKidModal = new bootstrap.Modal(document.getElementById('deleteModal'));
