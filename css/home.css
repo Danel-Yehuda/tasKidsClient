@@ -141,6 +141,7 @@ nav {
     position: relative;
     background-color: #fff;
     cursor: pointer;
+    
 }
 
 .card .icon {
@@ -249,4 +250,36 @@ nav {
     font-size: 2.5em;
     font-weight: bold;
     margin: 20px;
+}
+
+.color-picker {
+    position: absolute;
+    cursor: pointer;
+    top: 15px;
+    right: 110px;
+    font-size: 1.2em;
+}
+
+.color-picker svg {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.color-options {
+    display: flex;
+    justify-content: space-around;
+    position: absolute;
+    top: 35px;
+    right: 10px;
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.color-option {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
 }
