@@ -198,9 +198,20 @@ function approveTask(taskId) {
     .then(data => {
         console.log('Task approved:', data);
         updateTaskInDOM(data.data);
+
+        // Show notification
+        const notification = document.getElementById('notification');
+        notification.style.display = 'block';
+
+        // Hide notification after 3 seconds and redirect to home page
+        setTimeout(() => {
+            notification.style.display = 'none';
+            window.location.href = 'home.html';
+        }, 3000);
     })
     .catch(error => console.error('Error approving task:', error));
 }
+
 
 function updateTaskInDOM(task) {
     document.getElementById('task-title').textContent = task.publish_task_name;
