@@ -19,15 +19,15 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchMessages(user.data.user_id, 'user'); // Fetch messages for parent
     }
     if (kid) {
+        profilePicElement.src = "images/kid1.jpg";
+        document.getElementById('kidsNav').style.display = 'none';
+        document.getElementById('tasksNav').style.display = 'none';
+        kidSavingsElement.style.display = 'block';
         fetch(`https://taskidserver.onrender.com/api/kids/${kid.data.kid_id}`)
         .then(response => response.json())
         .then(updatedKid => {
             console.log('Updated kid data:', updatedKid);
             sessionStorage.setItem('kid', JSON.stringify(updatedKid));
-            profilePicElement.src = "images/kid1.jpg";
-            document.getElementById('kidsNav').style.display = 'none';
-            document.getElementById('tasksNav').style.display = 'none';
-            kidSavingsElement.style.display = 'block';
             savingsAmountElement.textContent = updatedKid.data.kid_coins;
             fetchMessages(updatedKid.data.kid_id, 'kid'); // Fetch messages for kid
         })
