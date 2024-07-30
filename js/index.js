@@ -30,7 +30,7 @@ $(document).ready(function() {
             password: $('#password').val()
         };
 
-        fetch('http://localhost:8080/api/users/signup', {
+        fetch('https://taskidserver.onrender.com/api/users/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ $(document).ready(function() {
             password: $('#signin-password').val()
         };
 
-        fetch('http://localhost:8080/api/users/signin', {
+        fetch('https://taskidserver.onrender.com/api/users/signin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ $(document).ready(function() {
             kid_password: $('#kid-password').val()
         };
 
-        fetch('http://localhost:8080/api/kids/signin', {
+        fetch('https://taskidserver.onrender.com/api/kids/signin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

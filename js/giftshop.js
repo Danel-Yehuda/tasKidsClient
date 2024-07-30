@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function fetchGifts() {
     try {
-        const response = await fetch('http://localhost:8080/api/gift-shop');
+        const response = await fetch('https://taskidserver.onrender.com/api/gift-shop');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -223,7 +223,7 @@ async function addGift(addGiftModal, userId) {
     console.log('Adding new gift with payload:', newGift);
 
     try {
-        const response = await fetch('http://localhost:8080/api/gift-shop', {
+        const response = await fetch('https://taskidserver.onrender.com/api/gift-shop', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -248,7 +248,7 @@ async function addGift(addGiftModal, userId) {
 
 async function deleteGift(giftId) {
     try {
-        const response = await fetch(`http://localhost:8080/api/gift-shop/${giftId}`, {
+        const response = await fetch(`https://taskidserver.onrender.com/api/gift-shop/${giftId}`, {
             method: 'DELETE',
         });
 
@@ -276,7 +276,7 @@ async function editGift(giftId) {
     console.log('Editing gift with payload:', updatedGift);
 
     try {
-        const response = await fetch(`http://localhost:8080/api/gift-shop/${giftId}`, {  // Corrected line
+        const response = await fetch(`https://taskidserver.onrender.com/api/gift-shop/${giftId}`, {  // Corrected line
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

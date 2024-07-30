@@ -59,7 +59,9 @@
             <button class="sort-tag">Coins</button>
             <button class="sort-tag">Assigned to</button>
         </section>
+        <h1 id="title">Publish Tasks</h1>
         <section id="task-cards" class="container mt-5">
+            
             <div class="row justify-content-center">
                 <!-- Cards will be inserted here by JavaScript -->
             </div>
@@ -71,6 +73,21 @@
             </ul>
         </section>
     </main>
+    <div style="display: none;">
+        <svg id="gradient-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FA7070;stop-opacity:1" />
+                    <stop offset="20%" style="stop-color:#C6EBC5;stop-opacity:1" />
+                    <stop offset="40%" style="stop-color:#7EA1FF;stop-opacity:1" />
+                    <stop offset="60%" style="stop-color:#FFD1E3;stop-opacity:1" />
+                    <stop offset="80%" style="stop-color:#D8B4F8;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <circle cx="12" cy="12" r="10" fill="url(#gradient)"></circle>
+        </svg>
+    </div>
+
 </body>
 
 </html>

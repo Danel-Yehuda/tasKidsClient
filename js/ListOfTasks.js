@@ -6,7 +6,7 @@ let editTaskModal;
 let taskId = '';
 
 window.onload = () => {
-    fetch("http://localhost:8080/api/tasks")
+    fetch("https://taskidserver.onrender.com/api/tasks")
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -30,7 +30,7 @@ window.onload = () => {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const userId = user ? user.data.user_id : null;
 
-    fetch(`http://localhost:8080/api/kids/byParent/${userId}`)
+    fetch(`https://taskidserver.onrender.com/api/kids/byParent/${userId}`)
         .then(response => response.json())
         .then(data => {
             PublishTask(data);
@@ -66,6 +66,12 @@ window.onload = () => {
     document.getElementById('editTaskForm').addEventListener('submit', function(event) {
         event.preventDefault();
         EditTask();
+    });
+
+    document.querySelector('.btn-outline-danger').addEventListener('click', function() {
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('kid');
+        window.location.href = 'index.html';
     });
 };
 
@@ -159,7 +165,7 @@ function EditTask() {
         return;
     }
 
-    fetch(`http://localhost:8080/api/tasks/${taskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/tasks/${taskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -297,7 +303,7 @@ function AddNewTask() {
         return;
     }
 
-    fetch("http://localhost:8080/api/tasks", {
+    fetch("https://taskidserver.onrender.com/api/tasks", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -329,7 +335,7 @@ function DeleteTask() {
         if (taskToDelete) {
             const taskId = taskToDelete.dataset.taskId;
 
-            fetch(`http://localhost:8080/api/tasks/${taskId}`, {
+            fetch(`https://taskidserver.onrender.com/api/tasks/${taskId}`, {
                 method: 'DELETE',
             })
             .then(response => {
@@ -403,7 +409,7 @@ function submitHandler(event, taskName) {
     };
 
     // Perform the POST request to create a publish task
-    fetch('http://localhost:8080/api/publish-tasks/', {
+    fetch('https://taskidserver.onrender.com/api/publish-tasks/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

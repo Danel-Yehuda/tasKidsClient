@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const kid = JSON.parse(sessionStorage.getItem('kid'));
 
+    document.querySelector('.btn-outline-danger').addEventListener('click', function() {
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('kid');
+        window.location.href = 'index.html';
+    });
+
     if (task) {
         currentTaskId = task.publish_task_id;
         document.getElementById('task-title').textContent = task.publish_task_name;
@@ -121,7 +127,7 @@ function editTask() {
     const coins = document.getElementById('editTaskCoins').value;
     const status = document.getElementById('editTaskStatus').value;
 
-    fetch(`http://localhost:8080/api/publish-tasks/${currentTaskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/${currentTaskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -145,7 +151,7 @@ function editTask() {
 }
 
 function deleteTask(taskId) {
-    fetch(`http://localhost:8080/api/publish-tasks/${taskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/${taskId}`, {
         method: 'DELETE'
     })
     .then(response => {
@@ -162,7 +168,7 @@ function deleteTask(taskId) {
 function updateTaskStatus(status) {
     const kid = JSON.parse(sessionStorage.getItem('kid'));
 
-    fetch(`http://localhost:8080/api/publish-tasks/status/${currentTaskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/status/${currentTaskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -182,7 +188,7 @@ function updateTaskStatus(status) {
 }
 
 function approveTask(taskId) {
-    fetch(`http://localhost:8080/api/publish-tasks/approve/${taskId}`, {
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/approve/${taskId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -192,9 +198,20 @@ function approveTask(taskId) {
     .then(data => {
         console.log('Task approved:', data);
         updateTaskInDOM(data.data);
+
+        // Show notification
+        const notification = document.getElementById('notification');
+        notification.style.display = 'block';
+
+        // Hide notification after 3 seconds and redirect to home page
+        setTimeout(() => {
+            notification.style.display = 'none';
+            window.location.href = 'home.html';
+        }, 3000);
     })
     .catch(error => console.error('Error approving task:', error));
 }
+
 
 function updateTaskInDOM(task) {
     document.getElementById('task-title').textContent = task.publish_task_name;
@@ -216,7 +233,7 @@ function updateTaskInDOM(task) {
 }
 
 function fetchTaskHistory(taskName) {
-    fetch(`http://localhost:8080/api/history/task/${taskName}`)
+    fetch(`https://taskidserver.onrender.com/api/history/task/${taskName}`)
         .then(response => response.json())
         .then(historyData => {
             const historyList = document.getElementById('task-history');

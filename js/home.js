@@ -19,12 +19,19 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchMessages(user.data.user_id, 'user'); // Fetch messages for parent
     }
     if (kid) {
-        profilePicElement.src = "images/kid1.jpg";
-        document.getElementById('kidsNav').style.display = 'none';
-        document.getElementById('tasksNav').style.display = 'none';
-        kidSavingsElement.style.display = 'block';
-        savingsAmountElement.textContent = kid.data.kid_coins;
-        fetchMessages(kid.data.kid_id, 'kid'); // Fetch messages for kid
+        fetch(`https://taskidserver.onrender.com/api/kids/${kid.data.kid_id}`)
+        .then(response => response.json())
+        .then(updatedKid => {
+            console.log('Updated kid data:', updatedKid);
+            sessionStorage.setItem('kid', JSON.stringify(updatedKid));
+            profilePicElement.src = "images/kid1.jpg";
+            document.getElementById('kidsNav').style.display = 'none';
+            document.getElementById('tasksNav').style.display = 'none';
+            kidSavingsElement.style.display = 'block';
+            savingsAmountElement.textContent = updatedKid.data.kid_coins;
+            fetchMessages(updatedKid.data.kid_id, 'kid'); // Fetch messages for kid
+        })
+        .catch(error => console.error('Error fetching updated kid data:', error));
     }
 
     // Fetch and display publish tasks
@@ -39,7 +46,7 @@ function formatDate(date) {
 }
 
 async function fetchPublishTasks(user, kid) {
-    let url = 'http://localhost:8080/api/publish-tasks';
+    let url = 'https://taskidserver.onrender.com/api/publish-tasks';
     if (user) {
         url += `?userId=${user.data.user_id}`;
     } else if (kid) {
@@ -55,7 +62,7 @@ async function fetchPublishTasks(user, kid) {
         console.log('Publish tasks result:', result);
 
         if (Array.isArray(result.data)) {
-            renderPublishTasks(result.data);
+            renderPublishTasks(result.data, kid, user);
         } else {
             console.error('Data is not an array:', result.data);
         }
@@ -64,7 +71,7 @@ async function fetchPublishTasks(user, kid) {
     }
 }
 
-function renderPublishTasks(tasks) {
+function renderPublishTasks(tasks,kid,user) {
     const taskCardsContainer = document.querySelector('#task-cards .row');
     taskCardsContainer.innerHTML = ''; // Clear existing tasks if any
 
@@ -83,10 +90,11 @@ function renderPublishTasks(tasks) {
                 <div class="details">
                     <div class="coins"><span>${task.publish_task_coins}</span> <i id="coinIcon" class="fas fa-coins"></i></div>
                     <div class="subDetails">
-                        <div class="assigned-to">Assigned to: ${task.publish_task_assigned_to}</div>
+                        ${user ? `<div class="assigned-to">Assigned to: ${task.publish_task_assigned_to}</div>` : ''}
                         <div class="deadline">Deadline: ${formattedDate}</div>
                     </div>
                 </div>
+                ${kid ? '<div class="color-picker">' + document.getElementById('gradient-icon').outerHTML + '</div>' : ''}
             `;
 
             card.addEventListener('click', function() {
@@ -94,15 +102,68 @@ function renderPublishTasks(tasks) {
                 window.location.href = 'taskPage.html';
             });
 
+            if (kid) {
+                const colorPicker = card.querySelector('.color-picker');
+                colorPicker.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showColorOptions(card, task.publish_task_id);
+                });
+            }
+
             taskCardsContainer.appendChild(card);
         }
     });
 }
 
+function showColorOptions(card, taskId) {
+    const colors = ['#FA7070', '#C6EBC5', '#7EA1FF', '#FFD1E3', '#D8B4F8']; // Example colors
+    const colorOptions = document.createElement('div');
+    colorOptions.classList.add('color-options');
+
+    colors.forEach(color => {
+        const colorOption = document.createElement('div');
+        colorOption.classList.add('color-option');
+        colorOption.style.backgroundColor = color;
+        colorOption.addEventListener('click', function(e) {
+            changeCardColor(card, color, taskId);
+            e.stopPropagation();
+            colorOptions.remove();
+        });
+        colorOptions.appendChild(colorOption);
+    });
+
+    card.appendChild(colorOptions);
+
+    // Remove the color options when clicking outside the card
+    document.addEventListener('click', function(e) {
+        if (!card.contains(e.target)) {
+            colorOptions.remove();
+        }
+    }, { once: true });
+}
+
+function changeCardColor(card, color, taskId) {
+    card.style.backgroundColor = color;
+
+    fetch(`https://taskidserver.onrender.com/api/publish-tasks/color/${taskId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ color: color })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Task color updated:', data);
+    })
+    .catch(error => console.error('Error updating task color:', error));
+}
+
+
 async function fetchMessages(id, userType) {
     console.log('Fetching messages for', userType, 'with ID:', id);
     try {
-        const response = await fetch(`http://localhost:8080/api/messages/${userType}/${id}`);
+        const response = await fetch(`https://taskidserver.onrender.com/api/messages/${userType}/${id}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
