@@ -40,7 +40,6 @@ function loadKids() {
     fetch("https://taskidserver.onrender.com/api/kids")
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             data.data.forEach(kid => {
                 addKidCard(kid);
             });
@@ -79,7 +78,6 @@ function addKid() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Kid added:', data);
         addKidCard(data.data);
     })
     .catch(error => console.error('Error adding kid:', error));
@@ -145,7 +143,6 @@ function editKid() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Kid updated:', data);
         updateKidCard(data.data);
     })
     .catch(error => console.error('Error updating kid:', error));
@@ -168,7 +165,6 @@ function deleteKid(kidId) {
     })
     .then(response => {
         if (response.ok) {
-            console.log('Kid deleted successfully');
             const kidCard = document.querySelector(`div[data-kid-id='${kidId}']`);
             if (kidCard) {
                 kidCard.remove();

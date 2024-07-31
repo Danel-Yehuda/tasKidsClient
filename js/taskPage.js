@@ -29,12 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         document.getElementById('edit-task').addEventListener('click', function() {
-            console.log('Edit button clicked');
             openEditModal(task);
         });
 
         document.getElementById('delete-task').addEventListener('click', function() {
-            console.log('Delete button clicked');
             currentTaskId = task.publish_task_id; // Store the current task ID for deletion
             deleteTaskModal.show();
         });
@@ -57,8 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         editTask();
     });
 
-    console.log('User:', user);
-    console.log('Kid:', kid);
     const profilePicElement = document.getElementById('profilePic');
 
     if (user) {
@@ -78,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const startTaskButton = document.getElementById('start-task-btn');
 
         if(task.publish_task_status === '2'){
-            console.log('Task in progress');
             startTaskButton.textContent = 'I\'m Done!'
         }
         if(task.publish_task_status === '3'){
@@ -142,7 +137,6 @@ function editTask() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Task updated:', data);
         updateTaskInDOM(data.data);
     })
     .catch(error => console.error('Error updating task:', error));
@@ -156,7 +150,6 @@ function deleteTask(taskId) {
     })
     .then(response => {
         if (response.ok) {
-            console.log('Task deleted successfully');
             window.location.href = 'home.html'; // Navigate to home page after deletion
         } else {
             console.error('Error deleting task');
@@ -181,7 +174,6 @@ function updateTaskStatus(status) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Task status updated:', data);
         updateTaskInDOM(data.data);
     })
     .catch(error => console.error('Error updating task status:', error));
@@ -196,7 +188,6 @@ function approveTask(taskId) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Task approved:', data);
         updateTaskInDOM(data.data);
 
         // Show notification

@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`https://taskidserver.onrender.com/api/kids/${kid.data.kid_id}`)
         .then(response => response.json())
         .then(updatedKid => {
-            console.log('Updated kid data:', updatedKid);
             sessionStorage.setItem('kid', JSON.stringify(updatedKid));
             savingsAmountElement.textContent = updatedKid.data.kid_coins;
             fetchMessages(updatedKid.data.kid_id, 'kid');
@@ -113,7 +112,6 @@ async function fetchGifts() {
             throw new Error('Network response was not ok');
         }
         const result = await response.json();
-        console.log('Gifts result:', result);
 
         if (Array.isArray(result.data)) {
             giftsData = result.data;
@@ -227,8 +225,6 @@ async function addGift(addGiftModal, userId) {
     };
     addGiftModal.hide();
 
-    console.log('Adding new gift with payload:', newGift);
-
     try {
         const response = await fetch('https://taskidserver.onrender.com/api/gift-shop', {
             method: 'POST',
@@ -243,7 +239,6 @@ async function addGift(addGiftModal, userId) {
         }
 
         const result = await response.json();
-        console.log('Gift added:', result);
 
         await fetchGifts();
 
@@ -264,7 +259,6 @@ async function deleteGift(giftId) {
         }
         deleteModal.hide();
 
-        console.log('Gift deleted successfully');
         await fetchGifts();
     } catch (error) {
         console.error('Error deleting gift:', error);
@@ -280,8 +274,6 @@ async function editGift(giftId) {
         coin_cost: parseInt(giftCoins, 10)
     };
 
-    console.log('Editing gift with payload:', updatedGift);
-
     try {
         const response = await fetch(`https://taskidserver.onrender.com/api/gift-shop/${giftId}`, {  // Corrected line
             method: 'PUT',
@@ -296,7 +288,6 @@ async function editGift(giftId) {
         }
 
         const result = await response.json();
-        console.log('Gift edited:', result);
 
         updateGiftInDOM(giftId, giftName, giftCoins);
 
@@ -353,7 +344,6 @@ async function buyGift(giftId) {
         }
 
         const result = await response.json();
-        console.log('Gift purchased:', result);
 
         // Update the kid's coins in sessionStorage
         kid.data.kid_coins -= selectedGift.coin_cost;

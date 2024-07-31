@@ -617,7 +617,7 @@ h2 {
     }
 }
 
-/* Responsive adjustments for main elements */
+
 @media (max-width: 576px) {
     h1 {
         font-size: 25px;

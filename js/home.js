@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const user = JSON.parse(sessionStorage.getItem('user'));
     const kid = JSON.parse(sessionStorage.getItem('kid'));
-    console.log('User:', user);
-    console.log('Kid:', kid);
     const profilePicElement = document.getElementById('profilePic');
     const kidSavingsElement = document.getElementById('kid-savings');
     const savingsAmountElement = document.getElementById('savings-amount');
@@ -26,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`https://taskidserver.onrender.com/api/kids/${kid.data.kid_id}`)
         .then(response => response.json())
         .then(updatedKid => {
-            console.log('Updated kid data:', updatedKid);
             sessionStorage.setItem('kid', JSON.stringify(updatedKid));
             savingsAmountElement.textContent = updatedKid.data.kid_coins;
             fetchMessages(updatedKid.data.kid_id, 'kid'); // Fetch messages for kid
@@ -59,7 +56,6 @@ async function fetchPublishTasks(user, kid) {
             throw new Error('Network response was not ok');
         }
         const result = await response.json();
-        console.log('Publish tasks result:', result);
 
         if (Array.isArray(result.data)) {
             renderPublishTasks(result.data, kid, user);
@@ -110,7 +106,6 @@ function renderPublishTasks(tasks, kid, user) {
                 const colorPicker = card.querySelector('.color-picker');
                 colorPicker.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    console.log('Color picker clicked for task ID:', task.publish_task_id);
                     showColorOptions(card, task.publish_task_id);
                 });
             }
@@ -121,7 +116,6 @@ function renderPublishTasks(tasks, kid, user) {
 }
 
 function showColorOptions(card, taskId) {
-    console.log('Showing color options for task ID:', taskId);
     const colors = ['#FA7070', '#C6EBC5', '#7EA1FF', '#FFD1E3', '#D8B4F8']; // Example colors
     const colorOptions = document.createElement('div');
     colorOptions.classList.add('color-options');
@@ -131,7 +125,6 @@ function showColorOptions(card, taskId) {
         colorOption.classList.add('color-option');
         colorOption.style.backgroundColor = color;
         colorOption.addEventListener('click', function(e) {
-            console.log('Color option clicked:', color);
             changeCardColor(card, color, taskId);
             e.stopPropagation();
             colorOptions.remove();
@@ -150,7 +143,6 @@ function showColorOptions(card, taskId) {
 }
 
 function changeCardColor(card, color, taskId) {
-    console.log('Changing card color to:', color);
     card.style.backgroundColor = color;
 
     fetch(`https://taskidserver.onrender.com/api/publish-tasks/color/${taskId}`, {
@@ -168,14 +160,12 @@ function changeCardColor(card, color, taskId) {
 }
 
 async function fetchMessages(id, userType) {
-    console.log('Fetching messages for', userType, 'with ID:', id);
     try {
         const response = await fetch(`https://taskidserver.onrender.com/api/messages/${userType}/${id}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         const messages = await response.json();
-        console.log('Messages:', messages);
 
         const messageList = document.getElementById('message-list');
         messageList.innerHTML = ''; // Clear existing messages

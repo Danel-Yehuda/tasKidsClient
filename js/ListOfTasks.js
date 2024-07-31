@@ -9,7 +9,6 @@ window.onload = () => {
     fetch("https://taskidserver.onrender.com/api/tasks")
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             createListTasks(data.data);
             DeleteTask();
             addPublishEventListeners();  // Register event listeners after tasks are created
@@ -125,7 +124,6 @@ function createListTasks(data) {
 
 function openEditModal(task) {
     taskId = task.task_id;
-    console.log('Task ID:', taskId);
     document.getElementById('editTaskName').value = task.task_name;
     editTaskModal.show();
 }
@@ -176,7 +174,6 @@ function EditTask() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Task updated:', data);
         updateTaskInDOM(taskId, taskName);
     })
     .catch(error => console.error('Error updating task:', error));
@@ -312,7 +309,6 @@ function AddNewTask() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Task added:', data);
         appendNewTask(data.data);
     })
     .catch(error => console.error('Error adding task:', error));
@@ -418,7 +414,6 @@ function submitHandler(event, taskName) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Publish task created:', data);
         const successAlert = document.getElementById('success-alert');
         successAlert.style.display = 'block';
         setTimeout(() => {
