@@ -68,10 +68,9 @@ nav {
     margin-left: 30px;
 }
 
-.btn {
-    color: white;
+.btn-outline-danger{
+    color: #4F939A;
     border-color: #4F939A;
-    background-color: #4F939A;
 }
 
 .btn:hover {
