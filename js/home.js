@@ -71,10 +71,10 @@ async function fetchPublishTasks(user, kid) {
     }
 }
 
-function renderPublishTasks(tasks,kid,user) {
+function renderPublishTasks(tasks, kid, user) {
     const taskCardsContainer = document.querySelector('#task-cards .row');
     taskCardsContainer.innerHTML = ''; // Clear existing tasks if any
-
+    
     tasks.forEach((task, index) => {
         if (task.approve !== 1) { // Filter out approved tasks
             const formattedDate = formatDate(new Date(task.publish_task_deadline));
@@ -83,6 +83,10 @@ function renderPublishTasks(tasks,kid,user) {
 
             card.classList.add(task.publish_task_status == '3' ? 'green' : task.publish_task_status == '2' ? 'yellow' : 'red');
             card.setAttribute('data-index', index);
+
+            if (kid) {
+                card.style.backgroundColor = task.color; // Set card color from task color
+            }
 
             card.innerHTML = `
                 <i class="icon fas fa-lightbulb"></i>
@@ -106,6 +110,7 @@ function renderPublishTasks(tasks,kid,user) {
                 const colorPicker = card.querySelector('.color-picker');
                 colorPicker.addEventListener('click', function(e) {
                     e.stopPropagation();
+                    console.log('Color picker clicked for task ID:', task.publish_task_id);
                     showColorOptions(card, task.publish_task_id);
                 });
             }
@@ -116,6 +121,7 @@ function renderPublishTasks(tasks,kid,user) {
 }
 
 function showColorOptions(card, taskId) {
+    console.log('Showing color options for task ID:', taskId);
     const colors = ['#FA7070', '#C6EBC5', '#7EA1FF', '#FFD1E3', '#D8B4F8']; // Example colors
     const colorOptions = document.createElement('div');
     colorOptions.classList.add('color-options');
@@ -125,6 +131,7 @@ function showColorOptions(card, taskId) {
         colorOption.classList.add('color-option');
         colorOption.style.backgroundColor = color;
         colorOption.addEventListener('click', function(e) {
+            console.log('Color option clicked:', color);
             changeCardColor(card, color, taskId);
             e.stopPropagation();
             colorOptions.remove();
@@ -143,6 +150,7 @@ function showColorOptions(card, taskId) {
 }
 
 function changeCardColor(card, color, taskId) {
+    console.log('Changing card color to:', color);
     card.style.backgroundColor = color;
 
     fetch(`https://taskidserver.onrender.com/api/publish-tasks/color/${taskId}`, {
@@ -158,7 +166,6 @@ function changeCardColor(card, color, taskId) {
     })
     .catch(error => console.error('Error updating task color:', error));
 }
-
 
 async function fetchMessages(id, userType) {
     console.log('Fetching messages for', userType, 'with ID:', id);
