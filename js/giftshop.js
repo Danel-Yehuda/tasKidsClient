@@ -5,6 +5,7 @@ let giftToEdit;
 let buyGiftModal;
 let giftToBuy;
 let successModal;
+let giftsData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.btn-outline-danger').addEventListener('click', function () {
@@ -15,8 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const user = JSON.parse(sessionStorage.getItem('user'));
     const kid = JSON.parse(sessionStorage.getItem('kid'));
-    console.log('User:', user);
-    console.log('Kid:', kid);
 
     const profilePicElement = document.getElementById('profilePic');
     const kidSavingsElement = document.getElementById('kid-savings');
@@ -117,6 +116,7 @@ async function fetchGifts() {
         console.log('Gifts result:', result);
 
         if (Array.isArray(result.data)) {
+            giftsData = result.data;
             renderGifts(result.data);
         } else {
             console.error('Data is not an array:', result.data);
@@ -312,6 +312,7 @@ function updateGiftInDOM(giftId, giftName, giftCoins) {
         giftElement.querySelector('.coins span').textContent = giftCoins;
     }
 }
+
 async function buyGift(giftId) {
     buyGiftModal.hide();
 
@@ -322,7 +323,23 @@ async function buyGift(giftId) {
     }
 
     const kidId = kid.data.kid_id;
+    const kidCoins = kid.data.kid_coins;
+
+    // Find the selected gift
+    const selectedGift = giftsData.find(gift => gift.gift_id == giftId);
+    if (!selectedGift) {
+        alert('Gift not found.');
+        return;
+    }
+
+    // Check if the kid has enough coins
+    if (kidCoins < selectedGift.coin_cost) {
+        alert("You don't have enough money 😿");
+        return;
+    }
+
     try {
+        // Proceed with the purchase
         const response = await fetch(`https://taskidserver.onrender.com/api/gift-shop/buy/${giftId}`, {
             method: 'PUT',
             headers: {
@@ -338,6 +355,11 @@ async function buyGift(giftId) {
         const result = await response.json();
         console.log('Gift purchased:', result);
 
+        // Update the kid's coins in sessionStorage
+        kid.data.kid_coins -= selectedGift.coin_cost;
+        sessionStorage.setItem('kid', JSON.stringify(kid));
+        document.getElementById('savings-amount').textContent = kid.data.kid_coins;
+
         await fetchGifts();
 
         buyGiftModal.hide();
@@ -347,3 +369,4 @@ async function buyGift(giftId) {
         alert('There was an error purchasing the gift. Please try again.');
     }
 }
+
