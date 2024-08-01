@@ -92,6 +92,18 @@ nav {
     box-shadow: 0 0 0 2px #6EAAB2 !important;
 }
 
+.btn-danger{
+    color: white;
+}
+
+.btn-secondary{
+    color: white;
+}
+.btn-primary{
+    color: white;
+
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -102,7 +114,6 @@ nav {
     display: flex;
     align-items: center;
 }
-
 
 h1 {
     font-size: 2.5em;
@@ -118,8 +129,6 @@ h1 {
     cursor: pointer;
     margin-right: 8px;
 }
-
-
 
 .task-details {
     margin-top: 20px;
