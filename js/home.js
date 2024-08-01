@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    document.getElementById('get-joke-button').addEventListener('click', async function() {
+        try {
+            const response = await fetch('https://v2.jokeapi.dev/joke/Any?type=twopart');
+            const joke = await response.json();
+            
+            if (!joke.error && joke.type === 'twopart') {
+                document.getElementById('joke-setup').innerText = joke.setup;
+                document.getElementById('joke-setup').style.display = 'block';
+                document.getElementById('get-joke-button').style.display = 'none';
+                document.getElementById('reveal-answer-button').style.display = 'block';
+                
+                document.getElementById('reveal-answer-button').addEventListener('click', function() {
+                    document.getElementById('joke-delivery').innerText = joke.delivery;
+                    document.getElementById('joke-delivery').style.display = 'block';
+                    document.getElementById('reveal-answer-button').style.display = 'none';
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching joke:', error);
+        }
+    });
+
     // Log out button functionality
     document.querySelector('.btn-outline-danger').addEventListener('click', function() {
         sessionStorage.removeItem('user');

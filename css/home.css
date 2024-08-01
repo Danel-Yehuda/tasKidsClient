@@ -69,8 +69,9 @@ nav {
 }
 
 .btn {
-    color: #4F939A;
+    color: #fff;
     border-color: #4F939A;
+    background-color: #6EAAB2;
 }
 
 .btn:hover {
@@ -282,4 +283,26 @@ nav {
     height: 20px;
     border-radius: 50%;
     cursor: pointer;
+}
+
+#joke-section {
+    position: absolute;
+    top: 15%;
+    right: 5%;
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    align-self: flex-start;
+}
+
+#joke-section button {
+    width: 100%;
+    margin-top: 5px;
+}
+
+#joke-setup, #joke-delivery {
+    font-size: 14px;
 }
