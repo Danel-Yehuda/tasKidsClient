@@ -286,9 +286,6 @@ nav {
 }
 
 #joke-section {
-    position: absolute;
-    top: 130px;
-    right: 5%;
     width: 250px;
     background-color: #f8f9fa;
     padding: 15px;
