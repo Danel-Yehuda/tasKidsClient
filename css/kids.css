@@ -73,7 +73,7 @@ nav {
     border-color: #4F939A;
 }
 
-.btn:hover {
+.btn-primary:hover {
     background-color: #6EAAB2;
     color: white;
     border-color: #6EAAB2;
@@ -92,6 +92,10 @@ nav {
     box-shadow: 0 0 0 2px #6EAAB2 !important;
 }
 
+.btn-primary{
+    background-color: #2fc0b4;
+
+}
 .container {
     max-width: 1000px;
     margin: 0 auto;
